@@ -1,0 +1,237 @@
+{
+  description = "NixOS systems and tools by shinta";
+
+  inputs = {
+    # Pin our primary nixpkgs repository. This is the main nixpkgs repository
+    # we'll use for our configurations. Be very careful changing this because
+    # it'll impact your entire system.
+    nixpkgs.url = "github:nixos/nixpkgs/release-22.05";
+
+    # We use the unstable nixpkgs repo for some packages.
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+
+    home-manager = {
+      url = "github:nix-community/home-manager/release-22.05";
+
+      # We want home-manager to use the same set of nixpkgs as our system.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Other packages
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
+    zig.url = "github:mitchellh/zig-overlay";
+
+    neovim-flake.url = "github:gvolpe/neovim-flake";
+
+    fish-foreign-env = {
+      url = "github:oh-my-fish/plugin-foreign-env";
+      flake = true;
+    };
+
+    theme-bobthefish = {
+      url = "github:oh-my-fish/theme-bobthefish";
+      flake = false;
+    };
+
+    fish-fzf = {
+      url = "github:jethrokuan/fzf";
+      flake = false;
+    };
+
+    fish-ghq = {
+      url = "github:decors/fish-ghq";
+      flake = false;
+    };
+
+    tmux-pain-control = {
+      url = "github:tmux-plugins/tmux-pain-control";
+      flake = false;
+    };
+
+    vim-cue = {
+      url = "github:jjo/vim-cue";
+      flake = false;
+    };
+
+    vim-misc = {
+      url = "github:mitchellh/vim-misc";
+      flake = false;
+    };
+
+    tmux-dracula = {
+      url = "github:dracula/tmux";
+      flake = false;
+    };
+
+    vim-fish = {
+      url = "github:dag/vim-fish";
+      flake = false;
+    };
+
+    vim-fugitive = {
+      url = "github:tpope/vim-fugitive";
+      flake = false;
+    };
+
+    vim-dracula = {
+      url = "github:dracula/vim";
+      flake = false;
+    };
+
+    nord-vim = {
+      url = "github:arcticicestudio/nord-vim";
+      flake = false;
+    };
+
+    nvim-treesitter = {
+      url = "github:nvim-treesitter/nvim-treesitter";
+      flake = false;
+    };
+
+    nvim-treesitter-playground = {
+      url = "github:nvim-treesitter/playground";
+      flake = false;
+    };
+
+    nvim-treesitter-textobjects = {
+      url = "github:nvim-treesitter/nvim-treesitter-textobjects";
+      flake = false;
+    };
+
+    tree-sitter-proto = {
+      url = "github:mitchellh/tree-sitter-proto";
+      flake = false;
+    };
+
+    nvim-lspconfig = {
+      url = "github:neovim/nvim-lspconfig";
+      flake = false;
+    };
+
+    nvim-lspinstall = {
+      url = "github:williamboman/nvim-lsp-installer";
+      flake = false;
+    };
+
+    nvim-cmp = {
+      url = "github:hrsh7th/nvim-cmp";
+      flake = false;
+    };
+
+    cmp-nvim-lsp = {
+      url = "github:hrsh7th/cmp-nvim-lsp";
+      flake = false;
+    };
+
+    cmp-vsnip = {
+      url = "github:hrsh7th/cmp-vsnip";
+      flake = false;
+    };
+
+    cmp-buffer = {
+      url = "github:hrsh7th/cmp-buffer";
+      flake = false;
+    };
+
+    vim-vsnip = {
+      url = "github:hrsh7th/vim-vsnip";
+      flake = false;
+    };
+
+    nvim-tree = {
+      url = "github:kyazdani42/nvim-tree.lua";
+      flake = false;
+    };
+
+    vim-tla = {
+      url = "github:hwayne/tla.vim";
+      flake = false;
+    };
+
+    vim-zig = {
+      url = "github:ziglang/zig.vim";
+      flake = false;
+    };
+
+    vim-nord = {
+      url = "github:crispgm/nord-vim";
+      flake = false;
+    };
+
+    nvim-comment = {
+      url = "github:numToStr/Comment.nvim";
+      flake = false;
+    };
+
+    nvim-plenary = {
+      url = "github:nvim-lua/plenary.nvim";
+      flake = false;
+    };
+
+    nvim-telescope = {
+      url = "github:nvim-telescope/telescope.nvim";
+      flake = false;
+    };
+  };
+
+  outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, ... }@inputs: let
+    mkVM = import ./lib/mkvm.nix;
+    fishOverlay = f: p: {
+      inherit theme-bobthefish fish-fzf fish-ghq tmux-pain-control tmux-dracula;
+    };
+
+    ownVim = import ./users/snt/vim.nix { inherit inputs; };
+
+    # Overlays is the list of overlays we want to apply from flake inputs.
+    overlays = [
+      inputs.neovim-nightly-overlay.overlay
+      inputs.zig.overlays.default
+      fishOverlay
+      ownVim
+
+      (final: prev: {
+        # We need to pin to this version because master is currently broken
+        zig-master = final.zigpkgs.master-2022-08-19;
+
+        # Go we always want the latest version
+        go = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.go_1_19;
+      })
+    ];
+  in {
+    nixosConfigurations.vm-aarch64 = mkVM "vm-aarch64" {
+      inherit nixpkgs home-manager;
+      system = "aarch64-linux";
+      user   = "snt";
+      #ownVim = import ./users/snt/vim.nix { inherit inputs; };
+
+      overlays = overlays ++ [(final: prev: {
+        # TODO: drop after release following NixOS 22.05
+        open-vm-tools = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.open-vm-tools;
+
+        # We need Mesa on aarch64 to be built with "svga". The default Mesa
+        # build does not include this: https://github.com/Mesa3D/mesa/blob/49efa73ba11c4cacaed0052b984e1fb884cf7600/meson.build#L192
+        mesa = prev.callPackage "${inputs.nixpkgs-unstable}/pkgs/development/libraries/mesa" {
+          llvmPackages = final.llvmPackages_latest;
+          inherit (final.darwin.apple_sdk.frameworks) OpenGL;
+          inherit (final.darwin.apple_sdk.libs) Xplugin;
+
+          galliumDrivers = [
+            # From meson.build
+            "v3d" "vc4" "freedreno" "etnaviv" "nouveau"
+            "tegra" "virgl" "lima" "panfrost" "swrast"
+
+            # We add this so we get the vmwgfx module
+            "svga"
+          ];
+        };
+      })];
+    };
+
+    nixosConfigurations.vm-intel = mkVM "vm-intel" rec {
+      inherit nixpkgs home-manager overlays;
+      system = "x86_64-linux";
+      user   = "snt";
+    };
+  };
+}
