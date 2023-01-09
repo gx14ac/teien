@@ -24,6 +24,7 @@
     pkgs.watch
     pkgs.zathura
     pkgs.ghq
+    pkgs.tig
 
     pkgs.go
     pkgs.gopls
