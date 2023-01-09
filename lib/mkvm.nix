@@ -1,25 +1,18 @@
-# This function creates a NixOS system based on our VM setup for a
-# particular architecture.
-#name: { nixpkgs, home-manager, system, user, overlays, ownVim }:
-name: { nixpkgs, home-manager, system, user, overlays }:
+# NixOS system based on our VM setup for a particular architecture.
+name: { nixpkgs, home-manager, inputs, system, user, overlays, nixos }:
 
 nixpkgs.lib.nixosSystem rec {
   inherit system;
 
   modules = [
-    # Apply our overlays. Overlays are keyed by system type so we have
-    # to go through and apply our system type. We do this first so
-    # the overlays are available globally.
     { nixpkgs.overlays = overlays; }
-    #{ nixpkgs.overlays = ownVim; }
 
     ../arch/${name}.nix
     ../machines/${name}.nix
-    ../users/${user}/nixos.nix
+    nixos
     home-manager.nixosModules.home-manager {
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
-      #home-manager.users.${user} = (import ../users/${user}/home-manager.nix) { inherit ownVim; };
       home-manager.users.${user} = (import ../users/${user}/home-manager.nix);
     }
 
