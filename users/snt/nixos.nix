@@ -1,4 +1,6 @@
-{ pkgs, ... }:
+{ inputs }:
+
+{ config, lib, pkgs, ... }:
 
 {
   # https://github.com/nix-community/home-manager/pull/2408
@@ -14,4 +16,8 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF3kiF4p3HL/xzksXTXly/8EModJ5uUYBe02FQDLlciZ shinta@shinta"
     ];
   };
+
+  nixpkgs.overlays = import ../../lib/overlays.nix ++ [
+    (import ./vim.nix { inherit inputs; })
+  ];
 }

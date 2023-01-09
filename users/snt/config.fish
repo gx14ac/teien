@@ -125,5 +125,5 @@ end
 alias fnix "nix-shell --run fish"
 
 if test -z $TMUX
-  fnix
+  tmux new-session
 end
