@@ -145,9 +145,6 @@
         # Go we always want the latest version
         go = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.go_1_19;
       })
-
-      # TODO: fix the problem
-      # (import ./users/snt/vim.nix) { inherit inputs; }
     ];
   in {
     nixosConfigurations.vm-aarch64 = mkVM "vm-aarch64" {

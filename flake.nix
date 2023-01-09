@@ -182,6 +182,7 @@
     };
 
     ownVim = import ./users/snt/vim.nix { inherit inputs; };
+    nixos = import ./users/snt/nixos.nix { inherit inputs; };
 
     # Overlays is the list of overlays we want to apply from flake inputs.
     overlays = [
@@ -200,10 +201,10 @@
     ];
   in {
     nixosConfigurations.vm-aarch64 = mkVM "vm-aarch64" {
-      inherit nixpkgs home-manager;
+      inherit nixpkgs home-manager inputs;
       system = "aarch64-linux";
-      user   = "snt";
-      #ownVim = import ./users/snt/vim.nix { inherit inputs; };
+      user = "snt";
+      nixos = nixos;
 
       overlays = overlays ++ [(final: prev: {
         # TODO: drop after release following NixOS 22.05
