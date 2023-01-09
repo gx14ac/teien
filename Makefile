@@ -56,7 +56,7 @@ vm/bootstrap0:
 	"
 
 vm/bootstrap:
-	NIXUSER=root $(MAKE) vm/copy
+	NIXUSER=root $(MAKE) vm/migration
 	NIXUSER=root $(MAKE) vm/switch
 	$(MAKE) vm/secrets
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
@@ -69,7 +69,7 @@ vm/secrets:
 		--exclude='environment' \
 		$(HOME)/.ssh/ $(NIXUSER)@$(NIXADDR):~/.ssh
 
-# copy the NixConf into the vm.
+# copy the NixConf into the your vm.
 vm/migration:
 	rsync -av -e 'ssh $(SSH_OPTIONS) -p$(NIXPORT)' \
 		--exclude='vendor/' \
@@ -83,6 +83,10 @@ vm/switch:
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
 		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\" \
 	"
+
+vm/build:
+	$(MAKE) vm/migration
+	$(MAKE) vm/switch
 
 # Build an ISO image
 iso/nixos.iso:
