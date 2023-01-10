@@ -52,7 +52,6 @@
 
   xdg.configFile."i3/config".text = builtins.readFile ./i3;
   xdg.configFile."rofi/config.rasi".text = builtins.readFile ./rofi;
-  xdg.configFile."devtty/config".text = builtins.readFile ./devtty;
 
   # tree-sitter parsers
   xdg.configFile."nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
@@ -163,8 +162,10 @@
   programs.tmux = {
     enable = true;
     terminal = "xterm-256color";
-    shortcut = "l";
+    shortcut = "x";
     secureSocket = false;
+    clock24 = true;
+    keyMode = "vi";
 
     extraConfig = ''
       set -ga terminal-overrides ",*256col*:Tc"
@@ -173,28 +174,9 @@
       set -g @dracula-show-network false
       set -g @dracula-show-weather false
     
-      bind -n C-k send-keys "clear"\; send-keys "Enter"
-    
       run-shell ${pkgs.tmux-pain-control}/pain_control.tmux
       run-shell ${pkgs.tmux-dracula}/dracula.tmux
     #'';
-  };
-
-  programs.alacritty = {
-    enable = true;
-
-    settings = {
-      env.TERM = "xterm-256color";
-
-      key_bindings = [
-        { key = "K"; mods = "Command"; chars = "ClearHistory"; }
-        { key = "V"; mods = "Command"; action = "Paste"; }
-        { key = "C"; mods = "Command"; action = "Copy"; }
-        { key = "Key0"; mods = "Command"; action = "ResetFontSize"; }
-        { key = "Equals"; mods = "Command"; action = "IncreaseFontSize"; }
-        { key = "Subtract"; mods = "Command"; action = "DecreaseFontSize"; }
-      ];
-    };
   };
 
   programs.kitty = {
@@ -231,7 +213,6 @@
       customVim.vim-tla
       customVim.vim-zig
       customVim.AfterColors
-      
       customVim.vim-nord
       customVim.nvim-comment
       customVim.nvim-tree
@@ -246,7 +227,6 @@
       vimPlugins.vim-airline-themes
       vimPlugins.vim-eunuch
       vimPlugins.vim-gitgutter
-  
       vimPlugins.vim-markdown
       vimPlugins.vim-nix
       vimPlugins.typescript-vim
