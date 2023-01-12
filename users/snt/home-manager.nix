@@ -25,12 +25,12 @@
     pkgs.zathura
     pkgs.ghq
     pkgs.tig
+    pkgs._1password
 
     pkgs.go
     pkgs.gopls
     pkgs.zig-master
 
-    pkgs.tlaplusToolbox
     pkgs.tetex
   ];
 
