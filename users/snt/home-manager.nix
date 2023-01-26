@@ -26,6 +26,7 @@
     pkgs.ghq
     pkgs.tig
     pkgs._1password
+    pkgs.dpkg
 
     pkgs.go
     pkgs.gopls
