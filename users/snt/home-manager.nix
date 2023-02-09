@@ -223,6 +223,7 @@
       customVim.nvim-treesitter
       customVim.nvim-treesitter-playground
       customVim.nvim-treesitter-textobjects
+      customVim.vim-terraform
   
       vimPlugins.vim-airline
       vimPlugins.vim-airline-themes

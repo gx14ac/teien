@@ -84,10 +84,9 @@ vm/switch:
 		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\" \
 	"
 
-vm/build:
+vm/update:
 	$(MAKE) vm/migration
 	$(MAKE) vm/switch
 
-# Build an ISO image
 iso/nixos.iso:
 	cd iso; ./build.sh

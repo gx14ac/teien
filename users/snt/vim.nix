@@ -139,6 +139,12 @@ self: super:
       src = inputs.nvim-telescope;
       buildPhase = ":";
     };
+
+    vim-terraform = vimUtils.buildVimPlugin {
+      name = "vim-terraform";
+      src = inputs.vim-terraform;
+      buildPhase = ":";
+    };
   };
 
   tree-sitter-proto = self.callPackage

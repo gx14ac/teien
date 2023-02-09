@@ -173,6 +173,11 @@
       url = "github:nvim-telescope/telescope.nvim";
       flake = false;
     };
+    
+    vim-terraform = {
+      url = "github:hashivim/vim-terraform";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, ... }@inputs: let
