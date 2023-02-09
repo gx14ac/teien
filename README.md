@@ -29,8 +29,7 @@ Run `ifconfig` and get the IP address of the first device. It is probably
 set this to the `NIXADDR` env var:
 
 
-$ export NIXADDR=<VM ip address>
-```
+`$ export NIXADDR=<VM ip address>`
 
 The Makefile assumes an Intel processor by default. If you are using an
 ARM-based processor (M1, etc.), you must change `NIXNAME` so that the ARM-based
