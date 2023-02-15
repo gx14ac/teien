@@ -27,6 +27,7 @@
     pkgs.tig
     pkgs._1password
     pkgs.dpkg
+    pkgs.openssl
 
     pkgs.go
     pkgs.gopls
