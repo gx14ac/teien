@@ -20,9 +20,11 @@ test:
 # cache. This does not alter the current running system. This requires
 # cachix authentication to be configured out of band.
 cache:
-	nix build '.#nixosConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
+		nix build '/nix-config/.#nixosConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
 		| jq -r '.[].outputs | to_entries[].value' \
-		| cachix push snt-nixos-config
+		| cachix push snt-nixos-config \
+	"
 
 # (snt) thx for mitchell
 vm/bootstrap0:
@@ -69,8 +71,13 @@ vm/secrets:
 		--exclude='environment' \
 		$(HOME)/.ssh/ $(NIXUSER)@$(NIXADDR):~/.ssh
 
+vm/test:
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
+		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild test --flake \"/nix-config#${NIXNAME}\" \
+	"
+
 # copy the NixConf into the your vm.
-vm/migration:
+vm/migrate:
 	rsync -av -e 'ssh $(SSH_OPTIONS) -p$(NIXPORT)' \
 		--exclude='vendor/' \
 		--exclude='.git/' \
@@ -84,8 +91,8 @@ vm/switch:
 		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\" \
 	"
 
-vm/update:
-	$(MAKE) vm/migration
+vm/rebuild:
+	$(MAKE) vm/migrate
 	$(MAKE) vm/switch
 
 iso/nixos.iso:
