@@ -3,25 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "1.12.5";
+  version = "2.14.0";
   src =
     if stdenv.isLinux then
       fetchzip
         {
           url = {
-            "i686-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
-            "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
-            "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm64_v${version}.zip";
+            "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_linux_arm64_v${version}.zip";
           }.${stdenv.hostPlatform.system};
           sha256 = {
-            "i686-linux" = "tCm/vDBASPN9FBSVRJ6BrFc7hdtZWPEAgvokJhjazPg=";
-            "x86_64-linux" = "3VkVMuTAfeEowkguJi2fd1kG7GwO1VN5GBPgNaH3Zv4=";
-            "aarch64-linux" = "sha256-17cS/Sf+DPZDlUsDYrO37vI6zjkeDhWXWQ/wk1jSAYo=";
+            "aarch64-linux" = "sha256-Pmfdz6jGWuRS76/35/+Al5gAbJ7rFyQQLB9tQr1Ecv8=";
           }.${stdenv.hostPlatform.system};
           stripRoot = false;
         } else
       fetchurl {
-        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_apple_universal_v${version}.pkg";
+        url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_apple_universal_v${version}.pkg";
         sha256 = "xG/6YZdkJxr5Py90rkIyG4mK40yFTmNSfih9jO2uF+4=";
       };
 
