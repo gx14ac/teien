@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "1.12.2";
+  version = "1.12.5";
   src =
     if stdenv.isLinux then
       fetchzip

@@ -28,6 +28,7 @@
     pkgs._1password
     pkgs.dpkg
     pkgs.openssl
+    pkgs.unzip
 
     pkgs.go
     pkgs.gopls
