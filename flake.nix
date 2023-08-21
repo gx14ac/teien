@@ -17,8 +17,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    darwin = {
+      url = "github:LnL7/nix-darwin";
+
+      # We want to use the same set of nixpkgs as our system.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Other packages
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     zig.url = "github:mitchellh/zig-overlay";
 
@@ -101,7 +111,7 @@
 
     tree-sitter-proto = {
       url = "github:mitchellh/tree-sitter-proto";
-      flake = false;
+      flake = true;
     };
 
     nvim-lspconfig = {
@@ -180,7 +190,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, tree-sitter-proto, ... }@inputs: let
     mkVM = import ./lib/mkvm.nix;
     fishOverlay = f: p: {
       inherit theme-bobthefish fish-fzf fish-ghq tmux-pain-control tmux-dracula;
@@ -195,14 +205,6 @@
       inputs.zig.overlays.default
       fishOverlay
       ownVim
-
-      (final: prev: {
-        # We need to pin to this version because master is currently broken
-        zig-master = final.zigpkgs.master-2022-08-19;
-
-        # Go we always want the latest version
-        go = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.go_1_19;
-      })
     ];
   in {
     nixosConfigurations.vm-aarch64 = mkVM "vm-aarch64" {
@@ -212,25 +214,8 @@
       nixos = nixos;
 
       overlays = overlays ++ [(final: prev: {
-        # TODO: drop after release following NixOS 22.05
-        open-vm-tools = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.open-vm-tools;
-
-        # We need Mesa on aarch64 to be built with "svga". The default Mesa
-        # build does not include this: https://github.com/Mesa3D/mesa/blob/49efa73ba11c4cacaed0052b984e1fb884cf7600/meson.build#L192
-        mesa = prev.callPackage "${inputs.nixpkgs-unstable}/pkgs/development/libraries/mesa" {
-          llvmPackages = final.llvmPackages_latest;
-          inherit (final.darwin.apple_sdk.frameworks) OpenGL;
-          inherit (final.darwin.apple_sdk.libs) Xplugin;
-
-          galliumDrivers = [
-            # From meson.build
-            "v3d" "vc4" "freedreno" "etnaviv" "nouveau"
-            "tegra" "virgl" "lima" "panfrost" "swrast"
-
-            # We add this so we get the vmwgfx module
-            "svga"
-          ];
-        };
+        # Example of bringing in an unstable package:
+        # open-vm-tools = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.open-vm-tools;
       })];
     };
 

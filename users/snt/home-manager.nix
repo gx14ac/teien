@@ -32,7 +32,7 @@
 
     pkgs.go
     pkgs.gopls
-    pkgs.zig-master
+    # pkgs.zigpkgs.master
 
     pkgs.tetex
   ];
@@ -40,7 +40,6 @@
   #---------------------------------------------------------------------
   # Env vars and dotfiles
   #---------------------------------------------------------------------
-
   home.sessionVariables = {
     LANG = "en_US.UTF-8";
     LC_CTYPE = "en_US.UTF-8";
@@ -67,6 +66,8 @@
   #---------------------------------------------------------------------
 
   programs.gpg.enable = true;
+
+  # home.stateVersion = "18.09";
 
   programs.bash = {
     enable = true;
