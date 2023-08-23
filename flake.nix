@@ -5,13 +5,13 @@
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
-    nixpkgs.url = "github:nixos/nixpkgs/release-22.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
 
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-22.05";
+      url = "github:nix-community/home-manager/release-23.05";
 
       # We want home-manager to use the same set of nixpkgs as our system.
       inputs.nixpkgs.follows = "nixpkgs";
@@ -109,11 +109,6 @@
       flake = false;
     };
 
-    tree-sitter-proto = {
-      url = "github:mitchellh/tree-sitter-proto";
-      flake = true;
-    };
-
     nvim-lspconfig = {
       url = "github:neovim/nvim-lspconfig";
       flake = false;
@@ -190,7 +185,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, tree-sitter-proto, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, ... }@inputs: let
     mkVM = import ./lib/mkvm.nix;
     fishOverlay = f: p: {
       inherit theme-bobthefish fish-fzf fish-ghq tmux-pain-control tmux-dracula;

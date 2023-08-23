@@ -55,19 +55,13 @@
   xdg.configFile."i3/config".text = builtins.readFile ./i3;
   xdg.configFile."rofi/config.rasi".text = builtins.readFile ./rofi;
 
-  # tree-sitter parsers
-  xdg.configFile."nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
-  xdg.configFile."nvim/queries/proto/folds.scm".source = "${pkgs.tree-sitter-proto}/queries/folds.scm";
-  xdg.configFile."nvim/queries/proto/highlights.scm".source = "${pkgs.tree-sitter-proto}/queries/highlights.scm";
-  xdg.configFile."nvim/queries/proto/textobjects.scm".source = ./textobjects.scm;
-
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
 
   programs.gpg.enable = true;
 
-  # home.stateVersion = "18.09";
+  home.stateVersion = "18.09";
 
   programs.bash = {
     enable = true;

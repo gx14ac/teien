@@ -146,11 +146,4 @@ self: super:
       buildPhase = ":";
     };
   };
-
-  tree-sitter-proto = self.callPackage
-    (inputs.nixpkgs + /pkgs/development/tools/parsing/tree-sitter/grammar.nix) { } {
-    language = "proto";
-    version  = "0.1.0";
-    source   = inputs.tree-sitter-proto;
-  };
 }

@@ -13,15 +13,11 @@
       keep-derivations = true
     '';
 
-    # public binary cache that I use for all my derivations. You can keep
-    # this, use your own, or toss it. Its typically safe to use a binary cache
-    # since the data inside is checksummed.
-    binaryCaches = ["https://mitchellh-nixos-config.cachix.org"];
-    binaryCachePublicKeys = ["mitchellh-nixos-config.cachix.org-1:bjEbXJyLrL1HZZHBbO4QALnI5faYZppzkU4D2s0G8RQ="];
+    settings = {
+      substituters = ["https://snt-nixos-config.cachix.org"];
+      trusted-public-keys = ["snt-nixos-config.cachix.org-1:Vsym/bZWc6BfIS15W6EwqME71GFl0ehYij4/OuD7CxM="];
+    };
   };
-
-  # We expect to run the VM on hidpi machines.
-  hardware.video.hidpi.enable = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -123,8 +119,8 @@
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
-  services.openssh.passwordAuthentication = true;
-  services.openssh.permitRootLogin = "no";
+  services.openssh.settings.PasswordAuthentication = true;
+  services.openssh.settings.PermitRootLogin = "no";
 
   # Disable the firewall since we're in a VM and we want to make it
   # easy to visit stuff in here. We only use NAT networking anyways.

@@ -46,11 +46,11 @@ vm/bootstrap0:
 		sed --in-place '/system\.stateVersion = .*/a \
 			nix.package = pkgs.nixUnstable;\n \
 			nix.extraOptions = \"experimental-features = nix-command flakes\";\n \
-			nix.binaryCaches = [\"https://snt-nixos-config.cachix.org\"];\n \
-			nix.binaryCachePublicKeys = [\"snt-nixos-config.cachix.org-1:Vsym/bZWc6BfIS15W6EwqME71GFl0ehYij4/OuD7CxM="];\n \
-  			services.openssh.enable = true;\n \
-			services.openssh.passwordAuthentication = true;\n \
-			services.openssh.permitRootLogin = \"yes\";\n \
+			nix.settings.substituters = [\"https://snt-nixos-config.cachix.org\"];\n \
+			nix.settings.trusted-public-keys = [\"snt-nixos-config.cachix.org-1:Vsym/bZWc6BfIS15W6EwqME71GFl0ehYij4/OuD7CxM="];\n \
+  			services.openssh.settings.enable = true;\n \
+			services.openssh.settings.passwordAuthentication = true;\n \
+			services.openssh.settings.permitRootLogin = \"yes\";\n \
 			users.users.root.initialPassword = \"root\";\n \
 		' /mnt/etc/nixos/configuration.nix; \
 		nixos-install --no-root-passwd; \
