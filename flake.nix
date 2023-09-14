@@ -30,13 +30,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zig.url = "github:mitchellh/zig-overlay";
-
     neovim-flake.url = "github:gvolpe/neovim-flake";
 
     fish-foreign-env = {
       url = "github:oh-my-fish/plugin-foreign-env";
-      flake = true;
+      flake = false;
     };
 
     theme-bobthefish = {
@@ -183,6 +181,8 @@
       url = "github:hashivim/vim-terraform";
       flake = false;
     };
+
+    zig.url = "github:mitchellh/zig-overlay";
   };
 
   outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, ... }@inputs: let

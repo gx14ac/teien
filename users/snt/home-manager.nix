@@ -32,7 +32,7 @@
 
     pkgs.go
     pkgs.gopls
-    # pkgs.zigpkgs.master
+    pkgs.zigpkgs.master
 
     pkgs.tetex
   ];
