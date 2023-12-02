@@ -1,3 +1,5 @@
+{ inputs }:
+
 { config, lib, pkgs, ... }:
 
 {
@@ -25,16 +27,14 @@
     pkgs.zathura
     pkgs.ghq
     pkgs.tig
+    pkgs.chromium
     pkgs._1password
     pkgs.dpkg
     pkgs.openssl
     pkgs.unzip
 
-    pkgs.go
     pkgs.gopls
-    pkgs.zigpkgs.master
-
-    pkgs.tetex
+    pkgs.zig
   ];
 
   #---------------------------------------------------------------------
@@ -133,10 +133,10 @@
     enable = true;
     userName = "Shintaro Okumura";
     userEmail = "flekystyley@gmail.com";
-    #signing = {
-    #  key = "523D5DC389D273BC";
-    #  signByDefault = true;
-    #};
+    signing = {
+      key = "C9C0D04DD5A2BA56";
+      signByDefault = true;
+    };
     aliases = {
       prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
       root = "rev-parse --show-toplevel";
@@ -171,6 +171,18 @@
       set -g @dracula-show-battery false
       set -g @dracula-show-network false
       set -g @dracula-show-weather false
+      set -g prefix C-x
+
+      unbind C-b
+
+      bind h select-pane -L
+      bind j select-pane -D
+      bind k select-pane -U
+      bind l select-pane -R
+      setw -g mode-keys vi
+      bind -T copy-mode-vi v send -X begin-selection
+      bind | split-window -h
+      bind - split-window -v
     
       run-shell ${pkgs.tmux-pain-control}/pain_control.tmux
       run-shell ${pkgs.tmux-dracula}/dracula.tmux
