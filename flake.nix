@@ -5,13 +5,13 @@
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
 
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.05";
+      url = "github:nix-community/home-manager/release-23.11";
 
       # We want home-manager to use the same set of nixpkgs as our system.
       inputs.nixpkgs.follows = "nixpkgs";
@@ -27,10 +27,9 @@
     # Other packages
     neovim-nightly-overlay = {
       url = "github:nix-community/neovim-nightly-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.neovim-flake.url = "github:neovim/neovim?dir=contrib&rev=040f1459849ab05b04f6bb1e77b3def16b4c2f2b";
     };
-
-    neovim-flake.url = "github:gvolpe/neovim-flake";
 
     fish-foreign-env = {
       url = "github:oh-my-fish/plugin-foreign-env";
@@ -186,7 +185,6 @@
   };
 
   outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, ... }@inputs: let
-    mkVM = import ./lib/mkvm.nix;
     fishOverlay = f: p: {
       inherit theme-bobthefish fish-fzf fish-ghq tmux-pain-control tmux-dracula;
     };
@@ -201,28 +199,24 @@
       fishOverlay
       ownVim
     ];
+
+    mkVM = import ./lib/mkvm.nix {
+      inherit nixpkgs home-manager inputs overlays;
+    };
   in {
     nixosConfigurations.vm-aarch64 = mkVM "vm-aarch64" {
-      inherit nixpkgs home-manager inputs;
       system = "aarch64-linux";
       user = "snt";
       nixos = nixos;
-
-      overlays = overlays ++ [(final: prev: {
-        # Example of bringing in an unstable package:
-        # open-vm-tools = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.open-vm-tools;
-      })];
     };
 
     nixosConfigurations.vm-aarch64-utm = mkVM "vm-aarch64-utm" rec {
-      inherit overlays nixpkgs home-manager;
       system = "aarch64-linux";
       user = "snt";
       nixos = nixos;
     };
 
     nixosConfigurations.vm-intel = mkVM "vm-intel" rec {
-      inherit nixpkgs home-manager overlays;
       system = "x86_64-linux";
       user   = "snt";
       nixos = nixos;
