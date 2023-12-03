@@ -3,6 +3,7 @@
 "--------------------------------------------------------------------
 " Fix vim paths so we load the vim-misc directory
 let g:vim_home_path = "~/.vim"
+set ts=4 sw=4
 
 " This works on NixOS 21.05
 let vim_misc_path = split(&packpath, ",")[0] . "/pack/home-manager/start/vim-misc/vimrc.vim"
