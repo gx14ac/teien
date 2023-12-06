@@ -82,7 +82,7 @@
   fonts = {
     fontDir.enable = true;
 
-    fonts = [
+    packages = [
       pkgs.fira-code
     ];
   };
