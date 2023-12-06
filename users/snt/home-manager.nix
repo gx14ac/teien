@@ -166,14 +166,14 @@
     keyMode = "vi";
 
     extraConfig = ''
+      unbind C-b
+
       set -ga terminal-overrides ",*256col*:Tc"
     
       set -g @dracula-show-battery false
       set -g @dracula-show-network false
       set -g @dracula-show-weather false
       set -g prefix C-x
-
-      unbind C-b
 
       bind h select-pane -L
       bind j select-pane -D
