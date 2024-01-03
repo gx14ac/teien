@@ -32,6 +32,7 @@
     pkgs.dpkg
     pkgs.openssl
     pkgs.unzip
+    pkgs.wget
 
     pkgs.gopls
     pkgs.zig
