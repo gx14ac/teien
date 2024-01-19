@@ -133,9 +133,9 @@
   programs.git = {
     enable = true;
     userName = "Shintaro Okumura";
-    userEmail = "flekystyley@gmail.com";
+    userEmail = "shinta@gx14ac.com";
     signing = {
-      key = "C9C0D04DD5A2BA56";
+      key = "54CA37D9C860E387";
       signByDefault = true;
     };
     aliases = {
@@ -147,7 +147,7 @@
       color.ui = true;
       core.askPass = ""; # needs to be empty to use terminal for ask pass
       credential.helper = "store"; # want to make this more secure
-      github.user = "shintard";
+      github.user = "gx14ac";
       push.default = "tracking";
       init.defaultBranch = "main";
     };
