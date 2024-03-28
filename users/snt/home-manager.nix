@@ -228,6 +228,9 @@
       customVim.nvim-comment
       customVim.nvim-tree
       customVim.nvim-lspconfig
+      customVim.nvim-lspinstall
+      customVim.cmp-nvim-lsp
+      customVim.nvim-cmp
       customVim.nvim-plenary # depends on telescope
       customVim.nvim-telescope
       customVim.nvim-treesitter
