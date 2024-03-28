@@ -64,6 +64,8 @@
 
       # AARCH64: For now, on Apple Silicon, we must manually set the
       # display resolution. This is a known issue with VMware Fusion.
+      # studio display ${pkgs.xorg.xset}/bin/xset r rate 200 100
+      # 14inch ${pkgs.xorg.xset}/bin/xset r rate 200 40
       sessionCommands = ''
         ${pkgs.xorg.xset}/bin/xset r rate 200 40
       '';
