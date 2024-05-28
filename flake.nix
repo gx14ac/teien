@@ -181,7 +181,9 @@
       flake = false;
     };
 
-    zig.url = "github:mitchellh/zig-overlay";
+    zig = {
+     url = "github:mitchellh/zig-overlay";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, theme-bobthefish, fish-fzf, fish-ghq, tmux-pain-control, tmux-dracula, ... }@inputs: let
