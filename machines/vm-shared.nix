@@ -5,8 +5,8 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   nix = {
-    # use unstable nix so we can access flakes
-    package = pkgs.nixUnstable;
+    # use latest stable nix
+    package = pkgs.nixVersions.latest;
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
@@ -50,7 +50,7 @@
   # setup windowing environment
   services.xserver = {
     enable = true;
-    layout = "us";
+    xkb.layout = "us";
     dpi = 220;
 
     desktopManager = {
@@ -58,25 +58,20 @@
       wallpaper.mode = "fill";
     };
 
+    windowManager = {
+      i3.enable = true;
+    };
+
     displayManager = {
       defaultSession = "none+i3";
       lightdm.enable = true;
-
-      # AARCH64: For now, on Apple Silicon, we must manually set the
-      # display resolution. This is a known issue with VMware Fusion.
-      # studio display ${pkgs.xorg.xset}/bin/xset r rate 200 100
-      # 14inch ${pkgs.xorg.xset}/bin/xset r rate 200 40
       sessionCommands = ''
         ${pkgs.xorg.xset}/bin/xset r rate 200 40
       '';
     };
-
-    windowManager = {
-      i3.enable = true;
-    };
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.mutableUsers = false;
 
   # Manage fonts. We pull these from a secret directory since most of these
@@ -96,9 +91,9 @@
     gnumake
     killall
     niv
-    rxvt_unicode
+    rxvt-unicode-unwrapped
     xclip
-
+    ghostty
     # For hypervisors that support auto-resizing, this script forces it.
     # I've noticed not everyone listens to the udev events so this is a hack.
     (writeShellScriptBin "xrandr-auto" ''
@@ -130,7 +125,7 @@
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # on your system were taken. It's perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
