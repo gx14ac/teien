@@ -28,12 +28,13 @@
     pkgs.ghq
     pkgs.tig
     pkgs.chromium
-    pkgs._1password
+    pkgs._1password-cli
     pkgs.dpkg
     pkgs.openssl
     pkgs.unzip
     pkgs.wget
-
+    # for codex
+    pkgs.nodejs
     pkgs.gopls
     pkgs.zig
   ];
