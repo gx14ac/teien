@@ -48,6 +48,7 @@
     EDITOR = "nvim";
     PAGER = "less -FirSwX";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
+    OPENAI_API_KEY = "op://OpenAPI/credential/notesPlain";
   };
 
   home.file.".gdbinit".source = ./gdbinit;
@@ -55,6 +56,8 @@
 
   xdg.configFile."i3/config".text = builtins.readFile ./i3;
   xdg.configFile."rofi/config.rasi".text = builtins.readFile ./rofi;
+  xdg.configFile."ghostty/config".text = builtins.readFile ./ghostty.linux;
+  xdg.configFile."jj/config.toml".text = builtins.readFile ./jujutsu.toml;
 
   #---------------------------------------------------------------------
   # Programs
@@ -158,6 +161,10 @@
     goPath = "source/go";
   };
 
+  programs.jujutsu = {
+    enable = true;
+  };
+
   programs.tmux = {
     enable = true;
     terminal = "xterm-256color";
@@ -237,6 +244,7 @@
       customVim.nvim-treesitter-playground
       customVim.nvim-treesitter-textobjects
       customVim.vim-terraform
+      customVim.vim-copilot
   
       vimPlugins.vim-airline
       vimPlugins.vim-airline-themes

@@ -88,6 +88,11 @@ self: super:
       src = inputs.vim-zig;
     };
 
+    vim-copilot = vimUtils.buildVimPlugin {
+      name = "vim-copilot";
+      src = inputs.vim-copilot;
+    };
+
     cmp-nvim-lsp = vimUtils.buildVimPlugin {
       name = "cmp-nvim-lsp";
       src = inputs.cmp-nvim-lsp;

@@ -31,6 +31,13 @@
       flake = false;
     };
 
+    vim-copilot = {
+      url = "github:github/copilot.vim/v1.48.0";
+      flake = false;
+    };
+
+    jujutsu.url = "github:martinvonz/jj";
+
     fish-fzf = {
       url = "github:jethrokuan/fzf";
       flake = false;
@@ -187,6 +194,7 @@
     # Overlays is the list of overlays we want to apply from flake inputs.
     overlays = [
       inputs.zig.overlays.default
+      inputs.jujutsu.overlays.default
       fishOverlay
       ownVim
     ];
