@@ -22,6 +22,8 @@ lua <<EOF
 -- Add our custom treesitter parsers
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 
+vim.deprecate = function() end
+
 ---------------------------------------------------------------------
 -- Add our treesitter textobjects
 require'nvim-treesitter.configs'.setup {
@@ -65,7 +67,6 @@ require'nvim-treesitter.configs'.setup {
 local nvim_lsp = require('lspconfig')
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-
   -- Mappings.
   local opts = { noremap=true, silent=true }
   buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
@@ -85,20 +86,115 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
   -- Set autocommands conditional on server_capabilities
-  if client.resolved_capabilities.document_highlight then
-    require('lspconfig').util.nvim_multiline_command [[
-      :hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
-      :hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
-      :hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
-      augroup lsp_document_highlight
-        autocmd!
-        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-      augroup END
-    ]]
+  if client.server_capabilities.documentHighlightProvider then
+    vim.api.nvim_command([[
+      hi LspReferenceRead cterm=bold ctermbg=red guibg=LightYellow
+      hi LspReferenceText cterm=bold ctermbg=red guibg=LightYellow
+      hi LspReferenceWrite cterm=bold ctermbg=red guibg=LightYellow
+    ]])
+    local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
+    vim.api.nvim_create_autocmd({ "CursorHold" }, {
+      group = group,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.document_highlight()
+      end,
+    })
+    vim.api.nvim_create_autocmd({ "CursorMoved" }, {
+      group = group,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.clear_references()
+      end,
+    })
   end
 end
   nvim_lsp["gopls"].setup { on_attach = on_attach }
+  nvim_lsp["zls"].setup {
+    on_attach = on_attach,
+    settings = {
+      zls = {
+        enable_inlay_hints = true,
+        enable_semantic_tokens = true,
+        enable_ast_check_diagnostics = true,
+        enable_import_embedfile_subcommand = true,
+        enable_autofix = true,
+        enable_document_symbols = true,
+        enable_completion = true,
+        enable_go_to_definition = true,
+        enable_hover = true,
+        enable_references = true,
+        enable_rename = true,
+        enable_signature_help = true,
+        enable_snippets = true,
+        enable_type_information = true,
+        enable_workspace_symbols = true,
+        enable_format = true,
+        enable_incremental_sync = true,
+        enable_std_references = true,
+        enable_std_symbols = true,
+        enable_std_completion = true,
+        enable_std_go_to_definition = true,
+        enable_std_hover = true,
+        enable_std_references = true,
+        enable_std_rename = true,
+        enable_std_signature_help = true,
+        enable_std_snippets = true,
+        enable_std_type_information = true,
+        enable_std_workspace_symbols = true,
+      }
+    }
+  }
+
+-- Load avante_lib first
+require("avante_lib").load()
+
+-- Configure avante.nvim
+require("avante").setup({
+	provider = "copilot",
+	copilot = {
+		model = "claude-3.7-sonnet",
+	},
+	auto_suggestions_provider = "copilot",
+  file_selector = {
+		provider = "telescope",
+	},
+  behaviour = {
+    auto_suggestions = false,
+    auto_set_highlight_group = true,
+    auto_set_keymaps = true,
+    auto_apply_diff_after_generation = false,
+    support_paste_from_clipboard = false,
+    minimize_diff = true,
+  },
+  mappings = {
+    suggestion = {
+      accept = "<Tab>",
+    },
+  },
+	windows = {
+		position = "right",
+		wrap = true,
+		width = 30,
+		sidebar_header = {
+			enabled = true,
+			align = "right",
+			rounded = false,
+		},
+		input = {
+			height = 5,
+		},
+		edit = {
+			border = "single",
+			start_insert = true,
+		},
+		ask = {
+			floating = true,
+			start_insert = true,
+			border = "single",
+		},
+	},
+})
 
 EOF
 ''

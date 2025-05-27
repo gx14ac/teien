@@ -36,6 +36,7 @@
     # for codex
     pkgs.nodejs
     pkgs.gopls
+    pkgs.zls
     pkgs.zig
   ];
 
@@ -230,6 +231,7 @@
       customVim.vim-fugitive
       customVim.vim-misc
       customVim.vim-tla
+      customVim.vim-dracula
       customVim.vim-zig
       customVim.AfterColors
       customVim.vim-nord
@@ -245,7 +247,10 @@
       customVim.nvim-treesitter-playground
       customVim.nvim-treesitter-textobjects
       customVim.vim-terraform
+      customVim.avante-nvim
+      customVim.nui-nvim
       customVim.vim-copilot
+      customVim.dressing-nvim
   
       vimPlugins.vim-airline
       vimPlugins.vim-airline-themes

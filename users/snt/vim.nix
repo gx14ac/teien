@@ -21,7 +21,7 @@ self: super:
 
     vim-dracula = vimUtils.buildVimPlugin {
       name = "vim-dracula";
-      src = input.svim-dracula;
+      src = inputs.vim-dracula;
     };
 
     nord-vim = vimUtils.buildVimPlugin {
@@ -145,9 +145,68 @@ self: super:
       buildPhase = ":";
     };
 
+    dressing-nvim = vimUtils.buildVimPlugin {
+      name = "dressing.nvim";
+      src = inputs.dressing-nvim;
+      buildPhase = ":";
+    };
+
     vim-terraform = vimUtils.buildVimPlugin {
       name = "vim-terraform";
       src = inputs.vim-terraform;
+      buildPhase = ":";
+    };
+
+    avante-nvim-lib = super.pkgs.rustPlatform.buildRustPackage {
+      pname = "avante-nvim-lib";
+      version = "flake";
+      src = inputs.avante-nvim;
+
+      useFetchCargoVendor = true;
+      cargoHash = "sha256-pmnMoNdaIR0i+4kwW3cf01vDQo39QakTCEG9AXA86ck=";
+
+      nativeBuildInputs = with super.pkgs; [
+        pkg-config
+        perl
+      ];
+
+      buildInputs = with super.pkgs; [
+        openssl
+      ];
+
+      buildFeatures = ["luajit"];
+
+      checkFlags = [
+        # Disabled because they access the network.
+        "--skip=test_hf"
+        "--skip=test_public_url"
+        "--skip=test_roundtrip"
+        "--skip=test_fetch_md"
+      ];
+    };
+
+    avante-nvim = vimUtils.buildVimPlugin {
+      name = "avante-nvim";
+      src = inputs.avante-nvim;
+      dependencies = [
+        customVim.nvim-plenary
+        customVim.nui-nvim
+        customVim.nvim-treesitter
+        customVim.dressing-nvim
+      ];
+      postInstall = let
+        ext = super.pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
+      in ''
+        mkdir -p $out/build
+        ln -s ${customVim.avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
+        ln -s ${customVim.avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
+        ln -s ${customVim.avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
+      '';
+    };
+
+    nui-nvim = vimUtils.buildVimPlugin {
+      name = "nui.nvim";
+      src = inputs.nui-nvim;
       buildPhase = ":";
     };
   };

@@ -63,6 +63,16 @@
       flake = false;
     };
 
+    avante-nvim = {
+      url = "github:yetone/avante.nvim";
+      flake = false;
+    };
+
+    nui-nvim = {
+      url = "github:MunifTanjim/nui.nvim";
+      flake = false;
+    };
+
     tmux-dracula = {
       url = "github:dracula/tmux";
       flake = false;
@@ -175,6 +185,11 @@
     
     vim-terraform = {
       url = "github:hashivim/vim-terraform";
+      flake = false;
+    };
+
+    dressing-nvim = {
+      url = "github:stevearc/dressing.nvim";
       flake = false;
     };
 
