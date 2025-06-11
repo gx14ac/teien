@@ -2,8 +2,6 @@
 
 {
   imports = [
-    ../modules/i3.nix
-    ../modules/plasma.nix
     ../modules/ibus.nix
   ];
 
@@ -45,7 +43,6 @@
   networking.useDHCP = false;
 
   # https://github.com/mitchellh/nixos-config/issues/36
-  networking.interfaces.ens160.useDHCP = true;
   networking.interfaces.eth0.useDHCP = true;
 
   # Don't require password for sudo
@@ -95,11 +92,29 @@
     gtkmm3
   ];
 
-  services.xserver = lib.mkIf (config.specialisation != {}) {
+  services.xserver = {
     enable = true;
     xkb.layout = "us";
-    desktopManager.gnome.enable = true;
-    displayManager.gdm.enable = true;
+    dpi = 220;
+
+    desktopManager = {
+      xterm.enable = false;
+      wallpaper.mode = "fill";
+    };
+
+    displayManager = {
+      defaultSession = "none+i3";
+
+      # AARCH64: For now, on Apple Silicon, we must manually set the
+      # display resolution. This is a known issue with VMware Fusion.
+      sessionCommands = ''
+        ${pkgs.xorg.xset}/bin/xset r rate 200 40
+      '';
+    };
+
+    windowManager = {
+      i3.enable = true;
+    };
   };
 
   # Some programs need SUID wrappers, can be configured further or are
