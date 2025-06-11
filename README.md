@@ -17,16 +17,11 @@ $ passwd
 # change to root
 ```
 
-At this point, verify `/dev/nvme0n1` exists. This is the expected block device
-where the Makefile will install the OS. If you setup your VM to use NVMe,
-this should exist. If `/dev/sda` or `/dev/vda` exists instead, you didn't
-configure NVMe properly. Note, these other block device types work fine,
-but you'll probably have to modify the `bootstrap0` Makefile task to use
-the proper block device paths.
+At this point, verify /dev/sda exists. This is the expected block device where the Makefile will install the OS. If you setup your VM to use SATA, this should exist. If /dev/nvme or /dev/vda exists instead, you didn't configure the disk properly. Note, these other block device types work fine, but you'll have to modify the bootstrap0 Makefile task to use the proper block device paths.
 
-Run `ifconfig` and get the IP address of the first device. It is probably
-`192.168.58.XXX`, but it can be anything. In a terminal with this repository
-set this to the `NIXADDR` env var:
+Also at this point, I recommend making a snapshot in case anything goes wrong. I usually call this snapshot "prebootstrap0". This is entirely optional, but it'll make it super easy to go back and retry if things go wrong.
+
+Run ifconfig and get the IP address of the first device. It is probably 192.168.58.XXX, but it can be anything. In a terminal with this repository set this to the NIXADDR env var:
 
 
 `$ export NIXADDR=<VM ip address>`
