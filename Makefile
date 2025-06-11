@@ -89,6 +89,3 @@ vm/switch:
 vm/rebuild:
 	$(MAKE) vm/migrate
 	$(MAKE) vm/switch
-
-iso/nixos.iso:
-	cd iso; ./build.sh

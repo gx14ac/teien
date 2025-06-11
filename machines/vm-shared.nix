@@ -38,11 +38,18 @@
   # replicates the default behaviour.
   networking.useDHCP = false;
 
+  # https://github.com/mitchellh/nixos-config/issues/36
+  networking.interfaces.ens160.useDHCP = true;
+  networking.interfaces.eth0.useDHCP = true;
+
   # Don't require password for sudo
   security.sudo.wheelNeedsPassword = false;
 
   # Virtualization settings
   virtualisation.docker.enable = true;
+  virtualisation.lxd = {
+    enable = true;
+  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
