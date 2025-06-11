@@ -1,6 +1,12 @@
 { config, pkgs, lib, currentSystem, currentSystemName,... }:
 
 {
+  imports = [
+    ../modules/i3.nix
+    ../modules/plasma.nix
+    ../modules/ibus.nix
+  ];
+
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -54,30 +60,6 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # setup windowing environment
-  services.xserver = {
-    enable = true;
-    xkb.layout = "us";
-    dpi = 220;
-
-    desktopManager = {
-      xterm.enable = false;
-      wallpaper.mode = "fill";
-    };
-
-    windowManager = {
-      i3.enable = true;
-    };
-
-    displayManager = {
-      defaultSession = "none+i3";
-      lightdm.enable = true;
-      sessionCommands = ''
-        ${pkgs.xorg.xset}/bin/xset r rate 200 40
-      '';
-    };
-  };
-
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.mutableUsers = false;
 
@@ -112,6 +94,13 @@
     # if the clipboard sill works.
     gtkmm3
   ];
+
+  services.xserver = lib.mkIf (config.specialisation != {}) {
+    enable = true;
+    xkb.layout = "us";
+    desktopManager.gnome.enable = true;
+    displayManager.gdm.enable = true;
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
