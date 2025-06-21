@@ -4,6 +4,11 @@ self: super:
 
 {
   customVim = with self; {
+    vim-copilot = vimUtils.buildVimPlugin {
+      name = "vim-copilot";
+      src = inputs.vim-copilot;
+    };
+
     vim-cue = vimUtils.buildVimPlugin {
       name = "vim-cue";
       src = inputs.vim-cue;
@@ -76,6 +81,7 @@ self: super:
     vim-misc = vimUtils.buildVimPlugin {
       name = "vim-misc";
       src = inputs.vim-misc;
+      doCheck = false;
     };
 
     vim-tla = vimUtils.buildVimPlugin {
@@ -86,11 +92,6 @@ self: super:
     vim-zig = vimUtils.buildVimPlugin {
       name = "zig.vim";
       src = inputs.vim-zig;
-    };
-
-    vim-copilot = vimUtils.buildVimPlugin {
-      name = "vim-copilot";
-      src = inputs.vim-copilot;
     };
 
     cmp-nvim-lsp = vimUtils.buildVimPlugin {
@@ -137,12 +138,14 @@ self: super:
       name = "nvim-plenary";
       src = inputs.nvim-plenary;
       buildPhase = ":";
+      doCheck = false;
     };
 
     nvim-telescope = vimUtils.buildVimPlugin {
       name = "nvim-telescope";
       src = inputs.nvim-telescope;
       buildPhase = ":";
+      doCheck = false;
     };
 
     dressing-nvim = vimUtils.buildVimPlugin {
@@ -208,6 +211,55 @@ self: super:
       name = "nui.nvim";
       src = inputs.nui-nvim;
       buildPhase = ":";
+    };
+
+    github-nvim-theme = vimUtils.buildVimPlugin {
+      name = "github-nvim-theme";
+      src = inputs.github-nvim-theme;
+      buildPhase = ":";
+    };
+  
+    nvim-codecompanion = vimUtils.buildVimPlugin {
+      name = "nvim-codecompanion";
+      src = inputs.nvim-codecompanion;
+      doCheck = false;
+    };
+
+    nvim-dressing = vimUtils.buildVimPlugin {
+      name = "nvim-dressing";
+      src = inputs.nvim-dressing;
+    };
+
+    nvim-conform = vimUtils.buildVimPlugin {
+      name = "nvim-conform";
+      src = inputs.nvim-conform;
+    };
+
+    nvim-gitsigns = vimUtils.buildVimPlugin {
+      name = "nvim-gitsigns";
+      src = inputs.nvim-gitsigns;
+    };
+
+    nvim-lualine = vimUtils.buildVimPlugin {
+      name = "nvim-lualine";
+      src = inputs.nvim-lualine;
+    };
+
+    nvim-nui = vimUtils.buildVimPlugin {
+      name = "nvim-nui";
+      src = inputs.nvim-nui;
+    
+    };
+
+    nvim-render-markdown = vimUtils.buildVimPlugin {
+      name = "nvim-render-markdown";
+      src = inputs.nvim-render-markdown;
+    };
+
+    nvim-treesitter-context = vimUtils.buildVimPlugin {
+      name = "nvim-treesitter-context";
+      src = inputs.nvim-treesitter-context;
+      doCheck = false;
     };
   };
 }

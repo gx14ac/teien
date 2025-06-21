@@ -3,12 +3,87 @@
 "--------------------------------------------------------------------
 " Fix vim paths so we load the vim-misc directory
 let g:vim_home_path = "~/.vim"
+
+" This works on NixOS 21.05
+let vim_misc_path = split(&packpath, ",")[0] . "/pack/home-manager/start/vim-misc/vimrc.vim"
+if filereadable(vim_misc_path)
+  execute "source " . vim_misc_path
+endif
+
+" This works on NixOS 21.11
+let vim_misc_path = split(&packpath, ",")[0] . "/pack/home-manager/start/vimplugin-vim-misc/vimrc.vim"
+if filereadable(vim_misc_path)
+  execute "source " . vim_misc_path
+endif
+
+" This works on NixOS 22.11
+let vim_misc_path = split(&packpath, ",")[0] . "/pack/myNeovimPackages/start/vimplugin-vim-misc/vimrc.vim"
+if filereadable(vim_misc_path)
+  execute "source " . vim_misc_path
+endif
+
+lua <<EOF
+
+let g:vim_home_path = "~/.vim"
 set ts=4 sw=4
 
 " Color scheme settings
-colorscheme dracula
-set background=dark
+" colorscheme dracula
+" set background=dark
+" syntax enable
+
+" GitHub Theme settings
+lua <<EOF
+require('github-theme').setup({
+  options = {
+    transparent = false,
+    hide_nc_statusline = false,
+    dim_inactive = false,
+    styles = {
+      functions = "italic",
+    },
+    darken = {
+      floats = true,
+      sidebars = {
+        enable = true,
+        list = {"qf", "vista_kind", "terminal", "spectre_panel", "NeogitStatus", "Outline"},
+      },
+    },
+  },
+  on_colors = function(colors)
+    colors.hint = colors.orange
+    colors.error = colors.red
+  end,
+  on_highlights = function(hl, c)
+    local prompt = "#2d3149"
+    hl.TelescopeNormal = {
+      bg = c.bg_dark,
+      fg = c.fg_dark,
+    }
+    hl.TelescopeBorder = {
+      bg = c.bg_dark,
+      fg = c.bg_dark,
+    }
+    hl.TelescopeSelectionCaret = {
+      fg = prompt,
+      bg = prompt,
+    }
+    hl.TelescopeSelection = {
+      fg = prompt,
+      bg = prompt,
+    }
+    hl.TelescopeMatching = {
+      fg = c.blue7,
+    }
+  end,
+})
+
+-- Set the colorscheme
+vim.cmd('colorscheme github_dark')
+EOF
+
 syntax enable
+set background=dark
 
 " This works on NixOS 21.05
 let vim_misc_path = split(&packpath, ",")[0] . "/pack/home-manager/start/vim-misc/vimrc.vim"
@@ -150,56 +225,5 @@ end
       }
     }
   }
-
--- Load avante_lib first
-require("avante_lib").load()
-
--- Configure avante.nvim
-require("avante").setup({
-	provider = "copilot",
-	copilot = {
-		model = "claude-3.7-sonnet",
-	},
-	auto_suggestions_provider = "copilot",
-  file_selector = {
-		provider = "telescope",
-	},
-  behaviour = {
-    auto_suggestions = false,
-    auto_set_highlight_group = true,
-    auto_set_keymaps = true,
-    auto_apply_diff_after_generation = false,
-    support_paste_from_clipboard = false,
-    minimize_diff = true,
-  },
-  mappings = {
-    suggestion = {
-      accept = "<Tab>",
-    },
-  },
-	windows = {
-		position = "right",
-		wrap = true,
-		width = 30,
-		sidebar_header = {
-			enabled = true,
-			align = "right",
-			rounded = false,
-		},
-		input = {
-			height = 5,
-		},
-		edit = {
-			border = "single",
-			start_insert = true,
-		},
-		ask = {
-			floating = true,
-			start_insert = true,
-			border = "single",
-		},
-	},
-})
-
 EOF
 ''

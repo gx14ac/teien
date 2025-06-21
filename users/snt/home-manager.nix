@@ -33,7 +33,6 @@
     pkgs.openssl
     pkgs.unzip
     pkgs.wget
-    # for codex
     pkgs.nodejs
     pkgs.gopls
     pkgs.zls
@@ -236,21 +235,18 @@
       customVim.AfterColors
       customVim.vim-nord
       customVim.nvim-comment
-      customVim.nvim-tree
+      customVim.nvim-codecompanion
+      customVim.nvim-conform
+      customVim.nvim-dressing
+      customVim.nvim-gitsigns
+      customVim.nvim-lualine
       customVim.nvim-lspconfig
-      customVim.nvim-lspinstall
-      customVim.cmp-nvim-lsp
-      customVim.nvim-cmp
-      customVim.nvim-plenary # depends on telescope
+      customVim.nvim-nui
+      customVim.nvim-render-markdown
+      customVim.nvim-plenary
       customVim.nvim-telescope
-      customVim.nvim-treesitter
-      customVim.nvim-treesitter-playground
-      customVim.nvim-treesitter-textobjects
-      customVim.vim-terraform
-      customVim.avante-nvim
-      customVim.nui-nvim
-      customVim.vim-copilot
-      customVim.dressing-nvim
+      customVim.nvim-treesitter-context
+      customVim.github-nvim-theme
   
       vimPlugins.vim-airline
       vimPlugins.vim-airline-themes
@@ -267,7 +263,7 @@
 
   services.gpg-agent = {
     enable = true;
-    pinentryPackage = pkgs.pinentry-tty;
+    pinentry.package = pkgs.pinentry-tty;
 
     # cache the keys forever so we don't get asked for a password
     defaultCacheTtl = 31536000;

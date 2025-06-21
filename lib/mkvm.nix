@@ -14,6 +14,8 @@ nixpkgs.lib.nixosSystem rec {
   modules = [
     { nixpkgs.overlays = overlays; }
 
+    { nixpkgs.config.allowUnfree = true; }
+
     ../arch/${name}.nix
     ../machines/${name}.nix
     nixos

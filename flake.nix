@@ -2,13 +2,13 @@
   description = "NixOS systems and tools by shinta";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
 
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -28,11 +28,6 @@
 
     theme-bobthefish = {
       url = "github:oh-my-fish/theme-bobthefish";
-      flake = false;
-    };
-
-    vim-copilot = {
-      url = "github:github/copilot.vim/v1.48.0";
       flake = false;
     };
 
@@ -60,11 +55,6 @@
 
     vim-misc = {
       url = "github:mitchellh/vim-misc";
-      flake = false;
-    };
-
-    avante-nvim = {
-      url = "github:yetone/avante.nvim";
       flake = false;
     };
 
@@ -115,11 +105,6 @@
 
     nvim-lspconfig = {
       url = "github:neovim/nvim-lspconfig";
-      flake = false;
-    };
-
-    nvim-lspinstall = {
-      url = "github:williamboman/nvim-lsp-installer";
       flake = false;
     };
 
@@ -179,7 +164,7 @@
     };
 
     nvim-telescope = {
-      url = "github:nvim-telescope/telescope.nvim";
+      url = "github:nvim-telescope/telescope.nvim/0.1.8";
       flake = false;
     };
     
@@ -193,8 +178,59 @@
       flake = false;
     };
 
+    github-nvim-theme = {
+      url = "github:projekt0n/github-nvim-theme";
+      flake = false;
+    };
+
     zig = {
      url = "github:mitchellh/zig-overlay";
+     inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    vim-copilot = {
+      url = "github:github/copilot.vim/v1.48.0";
+      flake = false;
+    };
+
+    nvim-codecompanion = {
+      url = "github:olimorris/codecompanion.nvim";
+      flake = false;
+    };
+
+    nvim-conform = {
+      url = "github:stevearc/conform.nvim/v9.0.0";
+      flake = false;
+    };
+
+    nvim-dressing = {
+      url = "github:stevearc/dressing.nvim";
+      flake = false;
+    };
+
+    nvim-gitsigns = {
+      url = "github:lewis6991/gitsigns.nvim/v1.0.2";
+      flake = false;
+    };
+
+    nvim-lualine = {
+      url = "github:nvim-lualine/lualine.nvim";
+      flake = false;
+    };
+
+    nvim-nui = {
+      url = "github:MunifTanjim/nui.nvim";
+      flake = false;
+    };
+
+    nvim-render-markdown = {
+      url = "github:MeanderingProgrammer/render-markdown.nvim";
+      flake = false;
+    };
+
+    nvim-treesitter-context = {
+      url = "github:nvim-treesitter/nvim-treesitter-context";
+      flake = false;
     };
   };
 
@@ -212,6 +248,9 @@
       inputs.jujutsu.overlays.default
       fishOverlay
       ownVim
+      (final: prev: rec {
+        claude-code = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.claude-code;
+      })
     ];
 
     mkVM = import ./lib/mkvm.nix {
