@@ -50,7 +50,7 @@
     EDITOR = "nvim";
     PAGER = "less -FirSwX";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
-    OPENAI_API_KEY = "op://OpenAPI/credential/notesPlain";
+    OPENAI_API_KEY = "op://credential/notesPlain";
   };
 
   home.file.".gdbinit".source = ./gdbinit;
@@ -259,6 +259,7 @@
       vimPlugins.vim-markdown
       vimPlugins.vim-nix
       vimPlugins.typescript-vim
+      vimPlugins.copilot-lua
     ];
   
     extraConfig = (import ./vim-config.nix) { inherit pkgs; };

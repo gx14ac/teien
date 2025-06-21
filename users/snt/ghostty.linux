@@ -1,3 +1,5 @@
+theme = catppuccin-macchiato
+
 command = bash -l -c tmux
 font-size = 12
 font-family = JetBrains Mono
