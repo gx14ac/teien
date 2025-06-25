@@ -234,6 +234,7 @@
       customVim.vim-zig
       customVim.AfterColors
       customVim.vim-nord
+
       customVim.nvim-comment
       customVim.nvim-codecompanion
       customVim.nvim-conform
@@ -254,6 +255,8 @@
       vimPlugins.vim-gitgutter
       vimPlugins.vim-markdown
       vimPlugins.vim-nix
+      vimPlugins.nvim-treesitter-parsers.elixir
+      vimPlugins.nvim-treesitter
       vimPlugins.typescript-vim
       vimPlugins.copilot-lua
     ];
