@@ -250,7 +250,6 @@ require("codecompanion").setup({
         opts = {
           number = false,
           signcolumn = "no",
-          language = "Japanese",
         },
       },
     },
