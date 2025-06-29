@@ -230,11 +230,11 @@ require("codecompanion").setup({
     gemini = function()
       return require("codecompanion.adapters").extend("gemini", {
         env = {
-          api_key = "cmd:op read op://Gemini/credential/notesPlain --no-newline",
+	   api_key = "cmd:op read op://Gemini/credential/notesPlain --no-newline",
         },
         schema = {
           model = {
-            default = "gemini-2.5-pro-exp-03-25",
+            default = "gemini-1.5-pro",
           },
         },
       })
