@@ -144,7 +144,7 @@
     userName = "Shintaro Okumura";
     userEmail = "shinta@gx14ac.com";
     signing = {
-      key = "54CA37D9C860E387";
+      key = "6CD0302AF55761F0";
       signByDefault = true;
     };
     aliases = {
@@ -183,7 +183,7 @@
       unbind C-b
 
       set -ga terminal-overrides ",*256col*:Tc"
-    
+
       set -g @dracula-show-battery false
       set -g @dracula-show-network false
       set -g @dracula-show-weather false
@@ -197,7 +197,7 @@
       bind -T copy-mode-vi v send -X begin-selection
       bind | split-window -h
       bind - split-window -v
-    
+
       run-shell ${pkgs.tmux-pain-control}/pain_control.tmux
       run-shell ${pkgs.tmux-dracula}/dracula.tmux
     #'';
@@ -228,7 +228,7 @@
   programs.neovim = {
     enable = true;
     package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
-  
+
     plugins = with pkgs; [
       customVim.vim-cue
       customVim.vim-fish
@@ -253,7 +253,7 @@
       customVim.nvim-telescope
       customVim.nvim-treesitter-context
       customVim.github-nvim-theme
-  
+
       vimPlugins.vim-airline
       vimPlugins.vim-airline-themes
       vimPlugins.vim-eunuch
@@ -265,7 +265,7 @@
       vimPlugins.typescript-vim
       vimPlugins.copilot-lua
     ];
-  
+
     extraConfig = (import ./vim-config.nix) { inherit pkgs; };
   };
 
