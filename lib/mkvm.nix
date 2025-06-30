@@ -33,6 +33,7 @@ nixpkgs.lib.nixosSystem rec {
       config._module.args = {
         currentSystemName = name;
         currentSystem = system;
+        currentSystemUser = user;
       };
     }
   ];
