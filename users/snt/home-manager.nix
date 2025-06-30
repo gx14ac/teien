@@ -3,6 +3,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  nixpkgs.config.allowUnfree = true;
+
   xdg.enable = true;
 
   #---------------------------------------------------------------------
@@ -37,6 +39,8 @@
     pkgs.gopls
     pkgs.zls
     pkgs.zig
+
+    pkgs.claude-code
     pkgs.codex
   ];
 
