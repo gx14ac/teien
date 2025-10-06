@@ -40,7 +40,6 @@
     pkgs.zls
     pkgs.zig
 
-    pkgs.claude-code
     pkgs.codex
   ];
 
@@ -144,11 +143,7 @@
     userName = "Shintaro Okumura";
     userEmail = "shinta@gx14ac.com";
     signing = {
-<<<<<<< HEAD
       key = "69847720DA9C3381F589A505118AE47F5FD3E630";
-=======
-      key = "6CD0302AF55761F0";
->>>>>>> dba1fcf37fdeb4e0d4e79f8df0cc2f0863c938bb
       signByDefault = true;
     };
     aliases = {
