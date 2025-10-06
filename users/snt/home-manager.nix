@@ -144,7 +144,7 @@
     userName = "Shintaro Okumura";
     userEmail = "shinta@gx14ac.com";
     signing = {
-      key = "54CA37D9C860E387";
+      key = "69847720DA9C3381F589A505118AE47F5FD3E630";
       signByDefault = true;
     };
     aliases = {

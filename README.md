@@ -44,6 +44,7 @@ $ make vm/bootstrap0
 
 After the VM reboots, run the full bootstrap, this will finalize the
 NixOS customization using this configuration:
+**bootstrap0を保存している場合はここから。**
 
 ```
 $ make vm/bootstrap
