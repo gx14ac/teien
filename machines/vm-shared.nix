@@ -50,9 +50,8 @@
 
   # Virtualization settings
   virtualisation.docker.enable = true;
-  virtualisation.lxd = {
-    enable = true;
-  };
+  # Note: LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
+  # If you need containers similar to LXD, consider migrating to Incus.
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";

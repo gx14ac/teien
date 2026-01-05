@@ -42,6 +42,8 @@
 
     pkgs.codex
     pkgs.code-cursor
+  ] ++ lib.optionals (pkgs.unstable ? amp) [
+    pkgs.unstable.amp
   ];
 
   #---------------------------------------------------------------------
@@ -55,6 +57,8 @@
     PAGER = "less -FirSwX";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
     OPENAI_API_KEY = "op://credential/notesPlain";
+    # Used by Amp (adjust to your own 1Password item if needed).
+    AMP_API_KEY = "op://credential/ampApiKey";
   };
 
   home.file.".gdbinit".source = ./gdbinit;
@@ -89,6 +93,8 @@
       gp = "git push";
       gs = "git status";
       gt = "git tag";
+      amp = "op run -- amp";
+      codex = "op run -- codex";
     };
   };
 
@@ -121,6 +127,9 @@
       # that I'm just going to keep it consistent.
       pbcopy = "xclip";
       pbpaste = "xclip -o";
+
+      amp = "op run -- amp";
+      codex = "op run -- codex";
     };
 
     plugins = [
