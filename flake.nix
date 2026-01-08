@@ -252,7 +252,10 @@
       fishOverlay
       ownVim
       (final: prev: rec {
-        unstable = inputs.nixpkgs-unstable.legacyPackages.${prev.system};
+        unstable = import inputs.nixpkgs-unstable {
+          system = prev.system;
+          config.allowUnfree = true;
+        };
 
         claude-code = unstable.claude-code;
         # Track Ghostty from unstable (stable channels often lag behind).

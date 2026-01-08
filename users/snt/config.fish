@@ -125,3 +125,52 @@ end
 alias fnix "nix-shell --run fish"
 
 alias codex "op run -- codex"
+alias amp "op run -- amp"
+
+#-------------------------------------------------------------------------------
+# Claude Code x Amazon Bedrock
+#-------------------------------------------------------------------------------
+# Primary: Sonnet 4.5
+# Small/Fast: Haiku 4.5
+# Manual Switch: Opus 4.5
+
+# --- AWS Integrations ---
+set -gx CLAUDE_CODE_USE_BEDROCK 1
+set -gx AWS_REGION 'us-east-1'
+
+# AWS credentials via 1Password (動的取得)
+# 1Password にサインイン済みの場合のみ設定
+if type -q op; and op account list &>/dev/null
+    set -gx AWS_ACCESS_KEY_ID (op read "op://env/Claude Code/username" 2>/dev/null)
+    set -gx AWS_SECRET_ACCESS_KEY (op read "op://env/Claude Code/password" 2>/dev/null)
+end
+
+# --- Model config ---
+# Primary: Sonnet 4.5 (デフォルト)
+set -gx ANTHROPIC_MODEL 'us.anthropic.claude-sonnet-4-5-20250929-v1:0'
+
+# Small/Fast (cheap & fast): Haiku 4.5
+set -gx ANTHROPIC_SMALL_FAST_MODEL 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
+
+# --- Output / thinking limits ---
+set -gx CLAUDE_CODE_MAX_OUTPUT_TOKENS 4096
+set -gx MAX_THINKING_TOKENS 1024
+
+# --- モデル切り替え関数 ---
+# 使い方: ターミナルで `sonnet` または `opus` と入力して Enter
+function claude-env
+    echo "AWS_REGION: $AWS_REGION"
+    echo "PRIMARY: $ANTHROPIC_MODEL"
+    echo "FAST: $ANTHROPIC_SMALL_FAST_MODEL"
+    echo "MAX_OUT: $CLAUDE_CODE_MAX_OUTPUT_TOKENS THINK: $MAX_THINKING_TOKENS"
+end
+
+function sonnet
+    set -gx ANTHROPIC_MODEL "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+    echo "✓ Primary set to Sonnet 4.5"
+end
+
+function opus
+    set -gx ANTHROPIC_MODEL "us.anthropic.claude-opus-4-5-20251101-v1:0"
+    echo "✓ Primary set to Opus 4.5"
+end

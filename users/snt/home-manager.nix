@@ -42,6 +42,8 @@
 
     pkgs.codex
     pkgs.code-cursor
+    pkgs.claude-code
+    pkgs.awscli2
   ] ++ lib.optionals (pkgs.unstable ? amp) [
     pkgs.unstable.amp
   ];
