@@ -2,7 +2,27 @@
 
 { config, lib, pkgs, ... }:
 
-{
+let
+  shellAliases = {
+    ga = "git add";
+    gc = "git commit";
+    gco = "git checkout";
+    gcp = "git cherry-pick";
+    gdiff = "git diff";
+    gl = "git prettylog";
+    gp = "git push";
+    gs = "git status";
+    gt = "git tag";
+
+    # Two decades of using a Mac has made this such a strong memory
+    # that I'm just going to keep it consistent.
+    pbcopy = "xclip";
+    pbpaste = "xclip -o";
+
+    amp = "op run -- amp";
+    codex = "op run -- codex";
+  };
+in {
   nixpkgs.config.allowUnfree = true;
 
   xdg.enable = true;
@@ -16,6 +36,7 @@
   # not a huge list.
   home.packages = [
     pkgs.bat
+    pkgs.chezmoi
     pkgs.fd
     pkgs.firefox
     pkgs.fzf
@@ -63,13 +84,10 @@
     AMP_API_KEY = "op://credential/ampApiKey";
   };
 
-  home.file.".gdbinit".source = ./gdbinit;
-  home.file.".inputrc".source = ./inputrc;
-
-  xdg.configFile."i3/config".text = builtins.readFile ./i3;
-  xdg.configFile."rofi/config.rasi".text = builtins.readFile ./rofi;
-  xdg.configFile."ghostty/config".text = builtins.readFile ./ghostty.linux;
-  xdg.configFile."jj/config.toml".text = builtins.readFile ./jujutsu.toml;
+  # Dotfiles are managed by chezmoi - auto-apply on activation
+  home.activation.chezmoi = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    ${pkgs.chezmoi}/bin/chezmoi apply --source ~/git/github.com/shintaoku/dotfiles || true
+  '';
 
   #---------------------------------------------------------------------
   # Programs
@@ -83,24 +101,10 @@
     enable = true;
     shellOptions = [];
     historyControl = [ "ignoredups" "ignorespace" ];
-    initExtra = builtins.readFile ./bashrc;
-
-    shellAliases = {
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gcp = "git cherry-pick";
-      gdiff = "git diff";
-      gl = "git prettylog";
-      gp = "git push";
-      gs = "git status";
-      gt = "git tag";
-      amp = "op run -- amp";
-      codex = "op run -- codex";
-    };
+    shellAliases = shellAliases;
   };
 
-  programs.direnv= {
+  programs.direnv = {
     enable = true;
   };
 
@@ -110,29 +114,10 @@
       "source ${pkgs.theme-bobthefish}/functions/fish_prompt.fish"
       "source ${pkgs.theme-bobthefish}/functions/fish_right_prompt.fish"
       "source ${pkgs.theme-bobthefish}/functions/fish_title.fish"
-      (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
     ]);
 
-    shellAliases = {
-      ga = "git add";
-      gc = "git commit";
-      gco = "git checkout";
-      gcp = "git cherry-pick";
-      gdiff = "git diff";
-      gl = "git prettylog";
-      gp = "git push";
-      gs = "git status";
-      gt = "git tag";
-
-      # Two decades of using a Mac has made this such a strong memory
-      # that I'm just going to keep it consistent.
-      pbcopy = "xclip";
-      pbpaste = "xclip -o";
-
-      amp = "op run -- amp";
-      codex = "op run -- codex";
-    };
+    shellAliases = shellAliases;
 
     plugins = [
       {
@@ -211,12 +196,12 @@
 
       run-shell ${pkgs.tmux-pain-control}/pain_control.tmux
       run-shell ${pkgs.tmux-dracula}/dracula.tmux
-    #'';
+    '';
   };
 
   programs.kitty = {
     enable = true;
-    extraConfig = builtins.readFile ./kitty;
+    # Config managed by chezmoi
   };
 
   programs.i3status = {
@@ -240,19 +225,24 @@
     enable = true;
     package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
 
+    # Plugins still managed by Nix for reproducibility
     plugins = with pkgs; [
       customVim.vim-cue
       customVim.vim-fish
       customVim.vim-fugitive
       customVim.vim-misc
       customVim.vim-tla
-      customVim.vim-dracula
       customVim.vim-zig
       customVim.AfterColors
       customVim.vim-nord
 
+      # dracula-nvim from nixpkgs (Treesitter supported)
+      vimPlugins.dracula-nvim
+
+      # catppuccin theme (Treesitter supported)
+      vimPlugins.catppuccin-nvim
+
       customVim.nvim-comment
-      customVim.nvim-codecompanion
       customVim.nvim-conform
       customVim.nvim-dressing
       customVim.nvim-gitsigns
@@ -271,13 +261,21 @@
       vimPlugins.vim-gitgutter
       vimPlugins.vim-markdown
       vimPlugins.vim-nix
-      vimPlugins.nvim-treesitter-parsers.elixir
       vimPlugins.nvim-treesitter
+      vimPlugins.nvim-treesitter.withAllGrammars
+      # Or specify individual parsers:
+      # vimPlugins.nvim-treesitter-parsers.go
+      # vimPlugins.nvim-treesitter-parsers.lua
+      # vimPlugins.nvim-treesitter-parsers.nix
+      # vimPlugins.nvim-treesitter-parsers.python
+      # vimPlugins.nvim-treesitter-parsers.rust
+      # vimPlugins.nvim-treesitter-parsers.typescript
+      # vimPlugins.nvim-treesitter-parsers.javascript
       vimPlugins.typescript-vim
       vimPlugins.copilot-lua
     ];
 
-    extraConfig = (import ./vim-config.nix) { inherit pkgs; };
+    # Config managed by chezmoi (~/.config/nvim/init.lua)
   };
 
   services.gpg-agent = {
@@ -288,8 +286,6 @@
     defaultCacheTtl = 31536000;
     maxCacheTtl = 31536000;
   };
-
-  xresources.extraConfig = builtins.readFile ./Xresources;
 
   # Make cursor not tiny on HiDPI screens
   home.pointerCursor = {

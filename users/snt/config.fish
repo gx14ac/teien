@@ -61,7 +61,6 @@ mkdir -p $HOME/.vim/{backup,swap,undo}
 # Do not show any greeting
 set --universal --erase fish_greeting
 function fish_greeting; end
-funcsave fish_greeting
 
 # bobthefish theme
 set -g theme_color_scheme dracula
@@ -153,8 +152,8 @@ set -gx ANTHROPIC_MODEL 'us.anthropic.claude-sonnet-4-5-20250929-v1:0'
 set -gx ANTHROPIC_SMALL_FAST_MODEL 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
 
 # --- Output / thinking limits ---
-set -gx CLAUDE_CODE_MAX_OUTPUT_TOKENS 4096
-set -gx MAX_THINKING_TOKENS 1024
+set -gx CLAUDE_CODE_MAX_OUTPUT_TOKENS 8192
+set -gx MAX_THINKING_TOKENS 2048
 
 # --- モデル切り替え関数 ---
 # 使い方: ターミナルで `sonnet` または `opus` と入力して Enter

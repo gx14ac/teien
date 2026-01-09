@@ -83,7 +83,7 @@ vm/migrate:
 		--exclude='.git/' \
 		--exclude='.git-crypt/' \
 		--exclude='iso/' \
-		--rsync-path="sudo rsync" \
+		--rsync-path="sudo /run/current-system/sw/bin/rsync" \
 		$(MAKEFILE_DIR)/ $(NIXUSER)@$(NIXADDR):/nix-config
 
 vm/switch:

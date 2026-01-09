@@ -28,55 +28,8 @@ set ts=4 sw=4
 syntax enable
 set background=dark
 
-" GitHub Theme settings
-lua <<EOF
-require('github-theme').setup({
-  options = {
-    transparent = false,
-    hide_nc_statusline = false,
-    dim_inactive = false,
-    styles = {
-      functions = "italic",
-    },
-    darken = {
-      floats = true,
-      sidebars = {
-        enable = true,
-        list = {"qf", "vista_kind", "terminal", "spectre_panel", "NeogitStatus", "Outline"},
-      },
-    },
-  },
-  on_colors = function(colors)
-    colors.hint = colors.orange
-    colors.error = colors.red
-  end,
-  on_highlights = function(hl, c)
-    local prompt = "#2d3149"
-    hl.TelescopeNormal = {
-      bg = c.bg_dark,
-      fg = c.fg_dark,
-    }
-    hl.TelescopeBorder = {
-      bg = c.bg_dark,
-      fg = c.bg_dark,
-    }
-    hl.TelescopeSelectionCaret = {
-      fg = prompt,
-      bg = prompt,
-    }
-    hl.TelescopeSelection = {
-      fg = prompt,
-      bg = prompt,
-    }
-    hl.TelescopeMatching = {
-      fg = c.blue7,
-    }
-  end,
-})
-
--- Set the colorscheme
-vim.cmd('colorscheme github_dark')
-EOF
+" Dracula Theme
+colorscheme dracula
 
 lua <<EOF
 ---------------------------------------------------------------------
@@ -240,6 +193,10 @@ require("codecompanion").setup({
       })
     end,
   },
+  opts = {
+    -- Disable default <C-f> mapping
+    send_code = false,
+  },
   display = {
     chat = {
       show_header_separator = true,
@@ -258,6 +215,9 @@ require("codecompanion").setup({
     chat = {
       adapter = "gemini",
       keymaps = {
+        send = {
+          modes = { n = "<CR>", i = "<C-s>" },
+        },
         completion = {
           modes = { i = "<C-/>" },
           callback = "keymaps.completion",
