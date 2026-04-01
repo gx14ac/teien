@@ -27,6 +27,9 @@ in {
 
   xdg.enable = true;
 
+  xdg.configFile."i3/config" = { source = ./i3; force = true; };
+  xdg.configFile."ghostty/config" = { source = ./ghostty.linux; force = true; };
+
   #---------------------------------------------------------------------
   # Packages
   #---------------------------------------------------------------------

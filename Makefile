@@ -1,5 +1,5 @@
 # Connectivity info for your Linux VM
-NIXADDR ?= 192.168.150.135
+NIXADDR ?= 192.168.150.136
 NIXPORT ?= 22
 NIXUSER ?= snt
 
@@ -91,6 +91,13 @@ vm/switch:
 		sudo NIXPKGS_ALLOW_UNFREE=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\" \
 	"
 
+vm/dotfiles:
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) "mkdir -p ~/git/github.com/shintaoku/dotfiles"
+	rsync -av -e 'ssh $(SSH_OPTIONS) -p$(NIXPORT)' \
+		--exclude='.git/' \
+		$(HOME)/git/github.com/shintaoku/dotfiles/ $(NIXUSER)@$(NIXADDR):~/git/github.com/shintaoku/dotfiles
+
 vm/rebuild:
 	$(MAKE) vm/migrate
+	$(MAKE) vm/dotfiles
 	$(MAKE) vm/switch
