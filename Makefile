@@ -1,5 +1,5 @@
 # Connectivity info for your Linux VM
-NIXADDR ?= 192.168.150.136
+NIXADDR ?= 192.168.150.139
 NIXPORT ?= 22
 NIXUSER ?= snt
 

@@ -191,8 +191,8 @@
      inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    vim-copilot = {
-      url = "github:github/copilot.vim/v1.48.0";
+    llama-vim = {
+      url = "github:ggml-org/llama.vim";
       flake = false;
     };
 

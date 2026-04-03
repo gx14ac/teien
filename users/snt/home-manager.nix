@@ -21,6 +21,7 @@ let
 
     amp = "op run -- amp";
     codex = "op run -- codex";
+    # claude alias is defined as a fish function below (op run breaks TTY)
   };
 in {
   nixpkgs.config.allowUnfree = true;
@@ -63,6 +64,7 @@ in {
     pkgs.gopls
     pkgs.zls
     pkgs.zig
+    pkgs.clang-tools
 
     pkgs.codex
     pkgs.code-cursor
@@ -82,9 +84,20 @@ in {
     EDITOR = "nvim";
     PAGER = "less -FirSwX";
     MANPAGER = "sh -c 'col -bx | ${pkgs.bat}/bin/bat -l man -p'";
-    OPENAI_API_KEY = "op://credential/notesPlain";
-    # Used by Amp (adjust to your own 1Password item if needed).
-    AMP_API_KEY = "op://credential/ampApiKey";
+    # These are resolved by `op run` when using amp/codex aliases
+    # OPENAI_API_KEY = "op://credential/notesPlain";
+    # AMP_API_KEY = "op://credential/ampApiKey";
+
+    # Claude Code with AWS Bedrock
+    CLAUDE_CODE_USE_BEDROCK = "1";
+    AWS_REGION = "us-east-1";
+    # Primary: Sonnet 4.5
+    ANTHROPIC_MODEL = "us.anthropic.claude-sonnet-4-5-20250929-v1:0";
+    # Small/Fast: Haiku 4.5
+    ANTHROPIC_SMALL_FAST_MODEL = "us.anthropic.claude-haiku-4-5-20251001-v1:0";
+    # Output / thinking limits
+    CLAUDE_CODE_MAX_OUTPUT_TOKENS = "8192";
+    MAX_THINKING_TOKENS = "1024";
   };
 
   # Dotfiles are managed by chezmoi - auto-apply on activation
@@ -119,6 +132,31 @@ in {
       "source ${pkgs.theme-bobthefish}/functions/fish_title.fish"
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
+      # Claude Code model switching functions
+      ''
+      function claude
+          set -lx AWS_ACCESS_KEY_ID (op read op://env/claude-code-nix/env/AWS_ACCESS_KEY_ID)
+          set -lx AWS_SECRET_ACCESS_KEY (op read op://env/claude-code-nix/env/AWS_SECRET_ACCESS_KEY)
+          command claude $argv
+      end
+
+      function claude-env
+          echo "AWS_REGION: $AWS_REGION"
+          echo "PRIMARY: $ANTHROPIC_MODEL"
+          echo "FAST: $ANTHROPIC_SMALL_FAST_MODEL"
+          echo "MAX_OUT: $CLAUDE_CODE_MAX_OUTPUT_TOKENS THINK: $MAX_THINKING_TOKENS"
+      end
+
+      function sonnet
+          set -gx ANTHROPIC_MODEL "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+          echo "✓ Primary set to Sonnet 4.5"
+      end
+
+      function opus
+          set -gx ANTHROPIC_MODEL "us.anthropic.claude-opus-4-5-20251101-v1:0"
+          echo "✓ Primary set to Opus 4.5"
+      end
+      ''
     ]);
 
     shellAliases = shellAliases;
@@ -276,7 +314,12 @@ in {
       # vimPlugins.nvim-treesitter-parsers.typescript
       # vimPlugins.nvim-treesitter-parsers.javascript
       vimPlugins.typescript-vim
-      vimPlugins.copilot-lua
+      customVim.llama-vim
+      customVim.nvim-cmp
+      customVim.cmp-nvim-lsp
+      customVim.cmp-buffer
+      customVim.cmp-vsnip
+      customVim.vim-vsnip
     ];
 
     # Config managed by chezmoi (~/.config/nvim/init.lua)

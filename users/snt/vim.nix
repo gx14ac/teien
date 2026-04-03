@@ -4,9 +4,9 @@ self: super:
 
 {
   customVim = with self; {
-    vim-copilot = vimUtils.buildVimPlugin {
-      name = "vim-copilot";
-      src = inputs.vim-copilot;
+    llama-vim = vimUtils.buildVimPlugin {
+      name = "llama-vim";
+      src = inputs.llama-vim;
     };
 
     vim-cue = vimUtils.buildVimPlugin {
@@ -64,8 +64,8 @@ self: super:
     nvim-cmp = vimUtils.buildVimPlugin {
       name = "nvim-cmp";
       src = inputs.nvim-cmp;
-
       buildPhase = ":";
+      doCheck = false;
     };
 
     AfterColors = vimUtils.buildVimPlugin {
@@ -97,21 +97,25 @@ self: super:
     cmp-nvim-lsp = vimUtils.buildVimPlugin {
       name = "cmp-nvim-lsp";
       src = inputs.cmp-nvim-lsp;
+      doCheck = false;
     };
 
     cmp-vsnip = vimUtils.buildVimPlugin {
       name = "cmp-vsnip";
       src = inputs.cmp-vsnip;
+      doCheck = false;
     };
 
     cmp-buffer = vimUtils.buildVimPlugin {
       name = "cmp-buffer";
       src = inputs.cmp-buffer;
+      doCheck = false;
     };
 
     vim-vsnip = vimUtils.buildVimPlugin {
       name = "vim-vsnip";
       src = inputs.vim-vsnip;
+      doCheck = false;
     };
 
     nvim-tree = vimUtils.buildVimPlugin {

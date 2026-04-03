@@ -381,16 +381,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1750792728,
-        "narHash": "sha256-Lh3dopA8DdY+ZoaAJPrtkZOZaFEJGSYjOdAYYgOPgE4=",
+        "lastModified": 1775077333,
+        "narHash": "sha256-OXcxobt7lBkh1B8AjwreU+24myhtKpqeLfAeIyNLFY8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "366f00797b1efb70f2882d3da485e3c10fd3d557",
+        "rev": "49ca96b2714c5931e17401eff87f3edd42d2b0f2",
         "type": "github"
       },
       "original": {
         "owner": "nix-community",
-        "ref": "release-25.05",
+        "ref": "release-25.11",
         "repo": "home-manager",
         "type": "github"
       }
@@ -412,6 +412,22 @@
       "original": {
         "owner": "martinvonz",
         "repo": "jj",
+        "type": "github"
+      }
+    },
+    "llama-vim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775116349,
+        "narHash": "sha256-aYX33Btw00YQqvxgPdA6xifrOpeo7c+pBeKIB7po2qQ=",
+        "owner": "ggml-org",
+        "repo": "llama.vim",
+        "rev": "cfb472aa94e08e982e0ae395bbf01f2cc8a3c6b7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ggml-org",
+        "repo": "llama.vim",
         "type": "github"
       }
     },
@@ -507,11 +523,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1767364772,
-        "narHash": "sha256-fFUnEYMla8b7UKjijLnMe+oVFOz6HjijGGNS1l7dYaQ=",
+        "lastModified": 1775126147,
+        "narHash": "sha256-J0dZU4atgcfo4QvM9D92uQ0Oe1eLTxBVXjJzdEMQpD0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "16c7794d0a28b5a37904d55bcca36003b9109aaa",
+        "rev": "8d8c1fa5b412c223ffa47410867813290cdedfef",
         "type": "github"
       },
       "original": {
@@ -873,6 +889,7 @@
         "github-nvim-theme": "github-nvim-theme",
         "home-manager": "home-manager",
         "jujutsu": "jujutsu",
+        "llama-vim": "llama-vim",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-snapd": "nix-snapd",
         "nixpkgs": "nixpkgs_3",
@@ -899,7 +916,6 @@
         "theme-bobthefish": "theme-bobthefish",
         "tmux-dracula": "tmux-dracula",
         "tmux-pain-control": "tmux-pain-control",
-        "vim-copilot": "vim-copilot",
         "vim-cue": "vim-cue",
         "vim-dracula": "vim-dracula",
         "vim-fish": "vim-fish",
@@ -1030,23 +1046,6 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "type": "github"
-      }
-    },
-    "vim-copilot": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1746466057,
-        "narHash": "sha256-dWkmdjcpZyd45QTErkUQb1cgbyCYhxfXJUdYz2PO04E=",
-        "owner": "github",
-        "repo": "copilot.vim",
-        "rev": "18f485d892b56b311fd752039d6977333ebc2a0f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "github",
-        "ref": "v1.48.0",
-        "repo": "copilot.vim",
         "type": "github"
       }
     },
