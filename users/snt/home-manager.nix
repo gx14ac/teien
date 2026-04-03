@@ -111,6 +111,13 @@ in {
 
   programs.gpg.enable = true;
 
+  programs.ssh = {
+    enable = true;
+    addKeysToAgent = "yes";
+  };
+
+  services.ssh-agent.enable = true;
+
   home.stateVersion = "18.09";
 
   programs.bash = {

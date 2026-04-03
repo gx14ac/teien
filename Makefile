@@ -8,7 +8,9 @@ MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 # The name of the nixosConfiguration in the flake
 NIXNAME ?= vm-aarch64
 
-SSH_OPTIONS=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+SSH_CONTROL_PATH=/tmp/ssh-teien-$(NIXADDR)
+SSH_OPTIONS=-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPath=$(SSH_CONTROL_PATH) -o ControlPersist=30m
+SSH_OPTIONS_PASSWORD=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPath=$(SSH_CONTROL_PATH) -o ControlPersist=30m
 
 switch:
 ifeq ($(UNAME), Darwin)
@@ -29,7 +31,7 @@ cache:
 	"
 
 vm/bootstrap0:
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) root@$(NIXADDR) " \
+	ssh $(SSH_OPTIONS_PASSWORD) -p$(NIXPORT) root@$(NIXADDR) " \
 		parted /dev/nvme0n1 -- mklabel gpt; \
 		parted /dev/nvme0n1 -- mkpart primary 512MB -8GB; \
 		parted /dev/nvme0n1 -- mkpart primary linux-swap -8GB 100\%; \
@@ -67,7 +69,7 @@ vm/bootstrap:
 
 vm/secrets:
 	# SSH keys
-	rsync -av -e 'ssh $(SSH_OPTIONS)' \
+	rsync -av -e 'ssh $(SSH_OPTIONS_PASSWORD)' \
 		--exclude='environment' \
 		$(HOME)/.ssh/ $(NIXUSER)@$(NIXADDR):~/.ssh
 
