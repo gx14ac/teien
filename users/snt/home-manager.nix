@@ -65,6 +65,8 @@ in {
     pkgs.zls
     pkgs.zig
     pkgs.clang-tools
+    pkgs.valgrind
+    pkgs.gdb
 
     pkgs.codex
     pkgs.code-cursor
