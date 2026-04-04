@@ -102,7 +102,7 @@ in {
 
   # Dotfiles are managed by chezmoi - auto-apply on activation
   home.activation.chezmoi = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    ${pkgs.chezmoi}/bin/chezmoi apply --source ~/git/github.com/shintaoku/dotfiles || true
+    ${pkgs.chezmoi}/bin/chezmoi apply --force --source ~/git/github.com/shintaoku/dotfiles || true
   '';
 
   #---------------------------------------------------------------------
