@@ -243,7 +243,6 @@
     };
 
     ownVim = import ./users/snt/vim.nix { inherit inputs; };
-    nixos = import ./users/snt/nixos.nix { inherit inputs; };
 
     # Overlays is the list of overlays we want to apply from flake inputs.
     overlays = [

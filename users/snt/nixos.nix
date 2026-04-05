@@ -1,6 +1,4 @@
-{ inputs }:
-
-{ config, lib, pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   # https://github.com/nix-community/home-manager/pull/2408
