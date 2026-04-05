@@ -5,6 +5,7 @@ name:
 {
   system,
   user,
+  configDir ? user,
   darwin ? false
 }:
 
@@ -21,8 +22,8 @@ let
     then ../machines/${name}.nix
     else ../machines/${name}.nix;
 
-  userOSConfig = ../users/${user}/${if darwin then "darwin" else "nixos"}.nix;
-  userHMConfig = ../users/${user}/home-manager.nix;
+  userOSConfig = ../users/${configDir}/${if darwin then "darwin" else "nixos"}.nix;
+  userHMConfig = ../users/${configDir}/home-manager.nix;
 
   # NixOS vs nix-darwin functions
   systemFunc = if isDarwin then inputs.darwin.lib.darwinSystem else nixpkgs.lib.nixosSystem;

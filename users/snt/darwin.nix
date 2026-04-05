@@ -113,13 +113,13 @@
   };
 
   # User configuration
-  users.users.snt = {
-    home = "/Users/snt";
+  users.users.shinta = {
+    home = "/Users/shinta";
     shell = pkgs.fish;
   };
 
   # Required for some settings like homebrew
-  system.primaryUser = "snt";
+  system.primaryUser = "shinta";
 
   # macOS system settings
   system.defaults = {

@@ -285,7 +285,8 @@
     # macOS configuration
     darwinConfigurations.darwin = mkSystem "darwin" {
       system = "aarch64-darwin";
-      user = "snt";
+      user = "shinta";
+      configDir = "snt";
       darwin = true;
     };
   };
