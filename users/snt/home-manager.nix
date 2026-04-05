@@ -28,9 +28,11 @@ in {
 
   xdg.enable = true;
 
-  # Linux-specific configs
   xdg.configFile."i3/config" = lib.mkIf (!isDarwin) { source = ./i3; force = true; };
-  xdg.configFile."ghostty/config" = lib.mkIf (!isDarwin) { source = ./ghostty.linux; force = true; };
+  xdg.configFile."ghostty/config" = {
+    source = if isDarwin then ./ghostty.darwin else ./ghostty.linux;
+    force = true;
+  };
 
   #---------------------------------------------------------------------
   # Packages
@@ -61,6 +63,11 @@ in {
     pkgs.zls
     pkgs.zig
     pkgs.clang-tools
+
+    pkgs.cmake
+    pkgs.gh
+    pkgs.grpcurl
+    pkgs.bun
 
     pkgs.codex
     pkgs.code-cursor

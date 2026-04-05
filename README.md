@@ -1,11 +1,9 @@
-## NixOS System Configurations
+## teien - NixOS / nix-darwin System Configurations
 
-Here is my NixOS configuration file.
-almost all development is done in this environment.
+Declarative development environment for NixOS and macOS (nix-darwin).
+Manages CLI tools, GUI apps, shell, editor, and terminal configuration entirely through Nix.
 
 ### macOS Setup (nix-darwin)
-
-For macOS systems, this configuration supports nix-darwin.
 
 #### Prerequisites
 
@@ -23,78 +21,65 @@ cd ~/git/github.com/gx14ac/teien
 #### Initial Setup
 
 ```bash
-# Build and activate the darwin configuration (first time)
 nix run nix-darwin -- switch --flake ".#darwin"
 ```
 
 #### Making Changes
 
-After making changes to your configuration:
+```bash
+NIXPKGS_ALLOW_UNFREE=1 nix build --impure ".#darwinConfigurations.darwin.system"
+sudo NIXPKGS_ALLOW_UNFREE=1 ./result/sw/bin/darwin-rebuild switch --impure --flake ".#darwin"
+```
+
+Or use the Makefile:
 
 ```bash
-# Apply changes
-darwin-rebuild switch --flake ".#darwin"
+NIXNAME=darwin make switch
 ```
 
 #### What Gets Installed
 
-- **CLI tools**: fish, neovim, git, tmux, etc. (managed by Nix)
-- **GUI apps**: 1Password, Claude, Slack, etc. (managed by Homebrew)
+- **CLI tools**: fish, neovim, git, tmux, cmake, gh, etc. (managed by Nix via home-manager)
+- **GUI apps**: 1Password, Claude, Ghostty, Slack, etc. (managed by Homebrew)
+- **Terminal**: Ghostty (Homebrew cask) with nix-managed config
 - **System settings**: Dock, Finder, keyboard preferences
 
-Your existing macOS applications and settings won't be affected.
+#### Notes
+
+- **Homebrew `cleanup = "zap"` is enabled.** Any Homebrew package not listed in `darwin.nix` (`brews` / `casks`) will be removed on `darwin-rebuild switch`. Add new CLI tools to `home.packages` in `home-manager.nix` instead.
+- **Ghostty config is OS-specific:** `ghostty.darwin` (macOS) / `ghostty.linux` (NixOS VM). Do not use the `command` option on macOS as it conflicts with Ghostty's `/usr/bin/login` wrapper.
+- **chezmoi** runs automatically via `home.activation`. Ensure chezmoi-managed files do not conflict with home-manager-managed files.
 
 ---
 
 ### NixOS VM Setup
-
-```
-$ make iso/nixos.iso
-```
 
 Boot the VM, and using the graphical console, change the root password to "root":
 
 ```
 $ sudo su
 $ passwd
-# change to root
 ```
 
-At this point, verify /dev/sda exists. This is the expected block device where the Makefile will install the OS. If you setup your VM to use SATA, this should exist. If /dev/nvme or /dev/vda exists instead, you didn't configure the disk properly. Note, these other block device types work fine, but you'll have to modify the bootstrap0 Makefile task to use the proper block device paths.
+Verify `/dev/sda` exists. If `/dev/nvme` or `/dev/vda` exists instead, modify the `bootstrap0` Makefile task to use the correct block device paths.
 
-Also at this point, I recommend making a snapshot in case anything goes wrong. I usually call this snapshot "prebootstrap0". This is entirely optional, but it'll make it super easy to go back and retry if things go wrong.
-
-Run ifconfig and get the IP address of the first device. It is probably 192.168.58.XXX, but it can be anything. In a terminal with this repository set this to the NIXADDR env var:
-
-
-`$ export NIXADDR=<VM ip address>`
-
-The Makefile assumes an Intel processor by default. If you are using an
-ARM-based processor (M1, etc.), you must change `NIXNAME` so that the ARM-based
-configuration is used:
+Set the VM IP address and architecture:
 
 ```
-$ export NIXNAME=vm-aarch64
+$ export NIXADDR=<VM ip address>
+$ export NIXNAME=vm-aarch64  # for ARM-based processors
 ```
 
-Perform the initial bootstrap. This will install NixOS on the VM disk image
-but will not setup any other configurations yet. This prepares the VM for
-any NixOS customization:
+Bootstrap the VM:
 
 ```
 $ make vm/bootstrap0
 ```
 
-After the VM reboots, run the full bootstrap, this will finalize the
-NixOS customization using this configuration:
-**bootstrap0を保存している場合はここから。**
+After reboot, finalize the configuration:
 
 ```
 $ make vm/bootstrap
 ```
 
-You should have a graphical functioning dev VM.
-
-At this point, I never use Mac terminals ever again. I clone this repository
-in my VM and I use the other Make tasks such as `make test`, `make switch`, etc.
-to make changes my VM.
+Apply further changes with `make vm/rebuild`.

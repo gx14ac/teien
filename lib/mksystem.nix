@@ -46,6 +46,7 @@ in systemFunc rec {
     home-manager-module.home-manager {
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
+      home-manager.backupFileExtension = "backup";
       home-manager.users.${user} = import userHMConfig {
         inputs = inputs;
         isDarwin = isDarwin;
