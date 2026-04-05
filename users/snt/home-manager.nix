@@ -1,4 +1,4 @@
-{ inputs }:
+{ inputs, isDarwin ? false }:
 
 { config, lib, pkgs, ... }:
 
@@ -14,11 +14,11 @@ let
     gs = "git status";
     gt = "git tag";
 
-    # Two decades of using a Mac has made this such a strong memory
-    # that I'm just going to keep it consistent.
+  } // lib.optionalAttrs (!isDarwin) {
+    # Linux-only aliases: make pbcopy/pbpaste work like macOS
     pbcopy = "xclip";
     pbpaste = "xclip -o";
-
+  } // {
     amp = "op run -- amp";
     codex = "op run -- codex";
     # claude alias is defined as a fish function below (op run breaks TTY)
@@ -28,8 +28,9 @@ in {
 
   xdg.enable = true;
 
-  xdg.configFile."i3/config" = { source = ./i3; force = true; };
-  xdg.configFile."ghostty/config" = { source = ./ghostty.linux; force = true; };
+  # Linux-specific configs
+  xdg.configFile."i3/config" = lib.mkIf (!isDarwin) { source = ./i3; force = true; };
+  xdg.configFile."ghostty/config" = lib.mkIf (!isDarwin) { source = ./ghostty.linux; force = true; };
 
   #---------------------------------------------------------------------
   # Packages
@@ -42,21 +43,16 @@ in {
     pkgs.bat
     pkgs.chezmoi
     pkgs.fd
-    pkgs.firefox
     pkgs.fzf
     pkgs.git-crypt
     pkgs.htop
     pkgs.jq
     pkgs.ripgrep
-    pkgs.rofi
     pkgs.tree
     pkgs.watch
-    pkgs.zathura
     pkgs.ghq
     pkgs.tig
-    pkgs.chromium
     pkgs._1password-cli
-    pkgs.dpkg
     pkgs.openssl
     pkgs.unzip
     pkgs.wget
@@ -65,13 +61,20 @@ in {
     pkgs.zls
     pkgs.zig
     pkgs.clang-tools
-    pkgs.valgrind
-    pkgs.gdb
 
     pkgs.codex
     pkgs.code-cursor
     pkgs.claude-code
     pkgs.awscli2
+  ] ++ lib.optionals (!isDarwin) [
+    # Linux-only packages
+    pkgs.firefox
+    pkgs.rofi
+    pkgs.zathura
+    pkgs.chromium
+    pkgs.dpkg
+    pkgs.valgrind
+    pkgs.gdb
   ] ++ lib.optionals (pkgs.unstable ? amp) [
     pkgs.unstable.amp
   ];
@@ -118,7 +121,7 @@ in {
     addKeysToAgent = "yes";
   };
 
-  services.ssh-agent.enable = true;
+  services.ssh-agent.enable = !isDarwin; # macOS has its own ssh-agent
 
   home.stateVersion = "18.09";
 
@@ -255,7 +258,7 @@ in {
     # Config managed by chezmoi
   };
 
-  programs.i3status = {
+  programs.i3status = lib.mkIf (!isDarwin) {
     enable = true;
 
     general = {
@@ -274,7 +277,10 @@ in {
 
   programs.neovim = {
     enable = true;
-    package = inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
+    package =
+      if isDarwin
+      then pkgs.neovim-unwrapped  # Use stable neovim on macOS for better compatibility
+      else inputs.neovim-nightly-overlay.packages.${pkgs.system}.default;
 
     # Plugins still managed by Nix for reproducibility
     plugins = with pkgs; [
@@ -334,7 +340,7 @@ in {
     # Config managed by chezmoi (~/.config/nvim/init.lua)
   };
 
-  services.gpg-agent = {
+  services.gpg-agent = lib.mkIf (!isDarwin) {
     enable = true;
     pinentry.package = pkgs.pinentry-tty;
 
@@ -343,8 +349,8 @@ in {
     maxCacheTtl = 31536000;
   };
 
-  # Make cursor not tiny on HiDPI screens
-  home.pointerCursor = {
+  # Make cursor not tiny on HiDPI screens (Linux only)
+  home.pointerCursor = lib.mkIf (!isDarwin) {
     name = "Vanilla-DMZ";
     package = pkgs.vanilla-dmz;
     size = 128;

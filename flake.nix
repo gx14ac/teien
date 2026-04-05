@@ -16,7 +16,7 @@
     };
 
     darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-24.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -263,26 +263,30 @@
       })
     ];
 
-    mkVM = import ./lib/mkvm.nix {
+    mkSystem = import ./lib/mksystem.nix {
       inherit nixpkgs home-manager inputs overlays;
     };
   in {
-    nixosConfigurations.vm-aarch64 = mkVM "vm-aarch64" {
+    nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
       system = "aarch64-linux";
       user = "snt";
-      nixos = nixos;
     };
 
-    nixosConfigurations.vm-aarch64-utm = mkVM "vm-aarch64-utm" rec {
+    nixosConfigurations.vm-aarch64-utm = mkSystem "vm-aarch64-utm" rec {
       system = "aarch64-linux";
       user = "snt";
-      nixos = nixos;
     };
 
-    nixosConfigurations.vm-intel = mkVM "vm-intel" rec {
+    nixosConfigurations.vm-intel = mkSystem "vm-intel" rec {
       system = "x86_64-linux";
       user   = "snt";
-      nixos = nixos;
+    };
+
+    # macOS configuration
+    darwinConfigurations.darwin = mkSystem "darwin" {
+      system = "aarch64-darwin";
+      user = "snt";
+      darwin = true;
     };
   };
 }

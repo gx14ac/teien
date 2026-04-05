@@ -3,7 +3,50 @@
 Here is my NixOS configuration file.
 almost all development is done in this environment.
 
-### Setup
+### macOS Setup (nix-darwin)
+
+For macOS systems, this configuration supports nix-darwin.
+
+#### Prerequisites
+
+1. Install Nix using the Determinate Nix installer:
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
+2. Clone this repository:
+```bash
+git clone https://github.com/gx14ac/teien.git ~/git/github.com/gx14ac/teien
+cd ~/git/github.com/gx14ac/teien
+```
+
+#### Initial Setup
+
+```bash
+# Build and activate the darwin configuration (first time)
+nix run nix-darwin -- switch --flake ".#darwin"
+```
+
+#### Making Changes
+
+After making changes to your configuration:
+
+```bash
+# Apply changes
+darwin-rebuild switch --flake ".#darwin"
+```
+
+#### What Gets Installed
+
+- **CLI tools**: fish, neovim, git, tmux, etc. (managed by Nix)
+- **GUI apps**: 1Password, Claude, Slack, etc. (managed by Homebrew)
+- **System settings**: Dock, Finder, keyboard preferences
+
+Your existing macOS applications and settings won't be affected.
+
+---
+
+### NixOS VM Setup
 
 ```
 $ make iso/nixos.iso
