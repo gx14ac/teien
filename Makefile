@@ -5,6 +5,9 @@ NIXUSER ?= snt
 
 MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 
+# Detect OS
+UNAME := $(shell uname)
+
 # The name of the nixosConfiguration in the flake
 NIXNAME ?= vm-aarch64
 
