@@ -9,7 +9,11 @@ MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 UNAME := $(shell uname)
 
 # The name of the nixosConfiguration in the flake
+ifeq ($(UNAME), Darwin)
+NIXNAME ?= darwin
+else
 NIXNAME ?= vm-aarch64
+endif
 
 SSH_CONTROL_PATH=/tmp/ssh-teien-$(NIXADDR)
 SSH_OPTIONS=-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPath=$(SSH_CONTROL_PATH) -o ControlPersist=30m
