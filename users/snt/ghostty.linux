@@ -1,4 +1,4 @@
-theme = GithubDark
+theme = Catppuccin Macchiato
 
 command = bash -l -c tmux
 font-size = 12
