@@ -88,6 +88,7 @@
     casks = [
       "1password"
       "claude"
+      "cursor"
       "discord"
       "google-chrome"
       "iterm2"
