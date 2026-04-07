@@ -27,9 +27,21 @@ set ts=4 sw=4
 " Color scheme settings
 syntax enable
 set background=dark
+set termguicolors
 
-" Dracula Theme
-colorscheme dracula
+" GitHub Theme
+lua << THEME
+require('github-theme').setup({
+  options = {
+    theme_style = "dark_default",  -- dark_default, dark, dark_dimmed, dark_high_contrast, dark_colorblind
+    transparent = false,
+    terminal_colors = true,
+    dim_inactive = false,
+    module_default = true,
+  }
+})
+vim.cmd('colorscheme github_dark_default')
+THEME
 
 lua <<EOF
 ---------------------------------------------------------------------
@@ -76,11 +88,14 @@ require'nvim-treesitter.configs'.setup {
 
 require("conform").setup({
   formatters_by_ft = {
+    c = { "clang_format" },
     cpp = { "clang_format" },
+    go = { "gofmt", "goimports" },  -- Add Go formatters
   },
 
   format_on_save = {
     lsp_fallback = true,
+    timeout_ms = 500,
   },
 })
 
