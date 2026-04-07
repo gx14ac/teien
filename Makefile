@@ -9,11 +9,8 @@ MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 UNAME := $(shell uname)
 
 # The name of the nixosConfiguration in the flake
-ifeq ($(UNAME), Darwin)
-NIXNAME ?= darwin
-else
+# Default for VMs
 NIXNAME ?= vm-aarch64
-endif
 
 SSH_CONTROL_PATH=/tmp/ssh-teien-$(NIXADDR)
 SSH_OPTIONS=-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ControlMaster=auto -o ControlPath=$(SSH_CONTROL_PATH) -o ControlPersist=30m
@@ -21,8 +18,8 @@ SSH_OPTIONS_PASSWORD=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null 
 
 switch:
 ifeq ($(UNAME), Darwin)
-	NIXPKGS_ALLOW_UNFREE=1 nix build --impure --extra-experimental-features nix-command --extra-experimental-features flakes ".#darwinConfigurations.${NIXNAME}.system"
-	sudo NIXPKGS_ALLOW_UNFREE=1 ./result/sw/bin/darwin-rebuild switch --impure --flake "$$(pwd)#${NIXNAME}"
+	NIXPKGS_ALLOW_UNFREE=1 nix build --impure --extra-experimental-features nix-command --extra-experimental-features flakes ".#darwinConfigurations.darwin.system"
+	sudo NIXPKGS_ALLOW_UNFREE=1 ./result/sw/bin/darwin-rebuild switch --impure --flake "$$(pwd)#darwin"
 else
 	sudo NIXPKGS_ALLOW_UNFREE=1 NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --impure --flake ".#${NIXNAME}"
 endif
