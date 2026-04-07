@@ -45,6 +45,10 @@ THEME
 
 lua <<EOF
 ---------------------------------------------------------------------
+-- Set leader key to space (must be set before any leader keymaps)
+vim.g.mapleader = " "
+
+---------------------------------------------------------------------
 -- Add our custom treesitter parsers
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
 
@@ -263,5 +267,15 @@ vim.keymap.set(
   "<cmd>CodeCompanionChat Add<cr>",
   { noremap = true, silent = true }
 )
+
+---------------------------------------------------------------------
+-- Telescope
+require('telescope').setup{}
+
+-- Telescope keymaps
+vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', { noremap = true, silent = true })
 EOF
 ''
