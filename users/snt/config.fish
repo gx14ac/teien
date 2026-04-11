@@ -50,6 +50,13 @@ if set -q KITTY_INSTALLATION_DIR
 end
 
 #-------------------------------------------------------------------------------
+# Tmux auto-start
+#-------------------------------------------------------------------------------
+if status is-interactive; and not set -q TMUX; and not set -q INSIDE_EMACS; and not set -q VSCODE_RESOLVING_ENVIRONMENT
+    tmux new-session -A -s main
+end
+
+#-------------------------------------------------------------------------------
 # Vim
 #-------------------------------------------------------------------------------
 # We should move this somewhere else but it works for now
