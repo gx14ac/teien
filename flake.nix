@@ -257,6 +257,7 @@
         };
 
         claude-code = unstable.claude-code;
+        codex = unstable.codex;
         code-cursor = unstable.code-cursor;
         # Track Ghostty from unstable (stable channels often lag behind).
         ghostty = unstable.ghostty;
