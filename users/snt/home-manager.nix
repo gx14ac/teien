@@ -63,6 +63,8 @@ in {
     pkgs.zls
     pkgs.zig
     pkgs.clang-tools
+    pkgs.rust-analyzer
+    pkgs.rustfmt
 
     pkgs.cmake
     pkgs.gh
