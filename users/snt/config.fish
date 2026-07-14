@@ -152,15 +152,14 @@ if type -q op; and op account list &>/dev/null
 end
 
 # --- Model config ---
-# Primary: Sonnet 4.5 (デフォルト)
-set -gx ANTHROPIC_MODEL 'us.anthropic.claude-sonnet-4-5-20250929-v1:0'
+# Primary: Opus 4.6 (Enable when Bedrock access is granted)
+set -gx ANTHROPIC_MODEL 'global.anthropic.claude-opus-4-6-v1'
 
-# Small/Fast (cheap & fast): Haiku 4.5
-set -gx ANTHROPIC_SMALL_FAST_MODEL 'us.anthropic.claude-haiku-4-5-20251001-v1:0'
+# Small/Fast (cheap & fast): Sonnet 4.6
+set -gx ANTHROPIC_SMALL_FAST_MODEL 'global.anthropic.claude-sonnet-4-6'
 
 # --- Output / thinking limits ---
-set -gx CLAUDE_CODE_MAX_OUTPUT_TOKENS 8192
-set -gx MAX_THINKING_TOKENS 2048
+set -gx CLAUDE_CODE_MAX_OUTPUT_TOKENS 64000
 
 # --- モデル切り替え関数 ---
 # 使い方: ターミナルで `sonnet` または `opus` と入力して Enter
@@ -172,11 +171,11 @@ function claude-env
 end
 
 function sonnet
-    set -gx ANTHROPIC_MODEL "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
-    echo "✓ Primary set to Sonnet 4.5"
+    set -gx ANTHROPIC_MODEL "global.anthropic.claude-sonnet-4-6"
+    echo "✓ Primary set to Sonnet 4.6"
 end
 
 function opus
-    set -gx ANTHROPIC_MODEL "us.anthropic.claude-opus-4-5-20251101-v1:0"
-    echo "✓ Primary set to Opus 4.5"
+    set -gx ANTHROPIC_MODEL "global.anthropic.claude-opus-4-6-v1"
+    echo "✓ Primary set to Opus 4.6"
 end
